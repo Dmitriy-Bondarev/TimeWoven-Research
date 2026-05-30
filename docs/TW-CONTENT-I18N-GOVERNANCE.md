@@ -30,7 +30,7 @@ Example **TW-R-0001**:
 |--------|--------|
 | RU | `published` |
 | EN | `published` |
-| ZH | `translation_pending` |
+| ZH | `published` |
 
 Implementation: `src/lib/publications/publication-status.ts` — computed from content entries (no manual registry file).
 
@@ -114,5 +114,5 @@ To add locale `de`:
 
 - [x] RU article — coverage: Русский + English links
 - [x] EN article — coverage: Русский + English links
-- [x] ZH fallback — notice + coverage links to RU/EN
-- [x] Matrix: RU ✓ EN ✓ ZH ✕
+- [x] ZH article — coverage: Русский + English + 中文
+- [x] Matrix: RU ✓ EN ✓ ZH ✓
