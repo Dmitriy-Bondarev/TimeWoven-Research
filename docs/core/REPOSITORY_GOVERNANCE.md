@@ -1,29 +1,53 @@
 # Repository governance (TimeWoven Research)
 
-**Actual as of:** 2026-05-19
+**Actual as of:** 2026-05-19  
+**Canon:** **TW-RESEARCH-GITHUB-001** — editorial PROD-first model.
 
-## Alignment with TimeWoven
+## Not the same as TimeWoven (app)
 
-| Setting | TimeWoven (app) | TimeWoven-Research (this repo) |
-|---------|-----------------|--------------------------------|
-| Default branch | `main` | `main` |
-| Integration branch | `develop` | `develop` |
-| Feature → develop | Squash merge | Squash merge |
-| develop → main | Merge commit | Merge commit |
-| Branch rulesets | `develop` + `main` | Same pattern (CI `quality`) |
-| Runtime | FastAPI VPS | Astro SSG + nginx |
+| Aspect | TimeWoven (FastAPI app) | TimeWoven-Research (this repo) |
+|--------|-------------------------|--------------------------------|
+| Purpose | Product runtime | Editorial publishing (SSG) |
+| Staging | staging.timewoven.ru | **None** (editorial) |
+| Integration branch | `develop` | **None required** |
+| Publish path | develop → main → deploy | **PROD → git → `main`** |
+| Default branch | `main` | **`main`** |
+| Protected branch | `develop` + `main` | **`main` only** |
 
-Полный аудит-канон: репозиторий **TimeWoven** — `docs/audit/It_audit_Spec_v5/TW_GOV_001_*`.
+См. отчёт: **`docs/TW-RESEARCH-GITHUB-001.md`**.
 
-## Initial repo repair (2026-05-19)
+## GitHub settings (after TW-RESEARCH-GITHUB-001)
 
-До выравнивания:
+| Setting | Value |
+|---------|--------|
+| Visibility | `public` |
+| Default branch | `main` |
+| Delete branch on merge | `true` |
+| Ruleset | **`Protect editorial — main`** only |
+| CI | `quality` on PR/push to **`main`** |
 
-- default branch на GitHub был `develop` при пустом `develop` и полным кодом на `main`;
-- не было CI и branch protection;
-- в git попал `scripts/__pycache__/`.
+### Ruleset `main`
 
-После `chore/TW-GOV-repo-alignment`:
+- PR required before merge
+- Status check **`quality`** required
+- **non_fast_forward** (no force push)
+- Merge methods: **squash**, **merge**
 
-- CI `quality`, rulesets, `main` как default;
-- PR #1 squash → `develop`, затем release PR `develop` → `main`.
+### `develop`
+
+- Ветка может существовать как **архив** (история до TW-RESEARCH-GITHUB-001).
+- **Нет** ruleset, **не** default, **не** в CI triggers.
+
+## Branch strategy (canonical)
+
+| Change type | Git path |
+|-------------|----------|
+| Small content / post-PROD text sync | Commit → PR → **`main`** (короткая ветка от `main`) |
+| Template / remark plugins / CSS runtime | **`feature/*`** → PR → **`main`** |
+| Large redesign | **`feature/*`** → PR → **`main`** |
+
+No permanent dependency on **`develop`**.
+
+## Historical note (2026-05-19)
+
+До TW-RESEARCH-GITHUB-001 репозиторий временно копировал app-flow (`develop` + rulesets). Это снято; канон — редакционная модель выше.

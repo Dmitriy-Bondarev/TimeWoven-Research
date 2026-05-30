@@ -1,49 +1,61 @@
 # TimeWoven Research — Rules of Work
 
 **Actual as of:** 2026-05-19  
-**Canonical source (org):** `Dmitriy-Bondarev/TimeWoven` — `docs/core/Rules_of_work.md` (TW-GOV-004).
+**Governance:** **TW-RESEARCH-GITHUB-001** (editorial / PROD-first; not TimeWoven app flow).
 
-Этот репозиторий следует **тому же Git flow**, что и основное приложение TimeWoven.
+Этот репозиторий — **редакционная платформа** (Astro SSG). Публикация идёт на **PROD**; staging-ветки и `develop` **не** являются частью обычного цикла.
+
+## Editorial workflow (канон)
+
+```text
+PROD (research.timewoven.ru)
+  → правка / публикация материала
+  → commit в git (Mac)
+  → push в GitHub (ветка main)
+```
+
+Нет редакционного staging. Нет обязательного `develop`.
 
 ## Branches
 
 | Branch | Role |
 |--------|------|
-| `develop` | Integration — все фичи через PR |
-| `main` | Release / PROD static deploy reference |
-| `feature/*` | Задачи TW-CONTENT-* |
+| **`main`** | Единственная рабочая ветка; зеркало опубликованного состояния |
+| **`feature/*`** | Шаблон, runtime, крупные изменения — только через PR в `main` |
+| **`develop`** | Опционально, архив / история; **не** требуется для публикации |
 
-## Merge policy (TW-GOV-004)
+## Merge policy
 
-- **`feature/*` → `develop`:** GitHub PR, **Squash merge only** (один PR → один коммит в `develop`).
-- **`develop` → `main`:** Release PR, **Merge commit only** (не squash).
-- **Запрещено:** direct push в `main`, force push в `main`.
+- **`feature/*` → `main`:** GitHub PR; **Squash merge** (рекомендуется) или merge commit.
+- **Запрещено:** force push в `main`; прямой push в `main` блокируется ruleset (кроме явного bypass владельца).
+- **Не используется:** `feature/*` → `develop` → `main`.
 
 ## Daily cycle (MAC)
 
 ```bash
 cd ~/Projects/TimeWoven-Research/timewoven-research
-git checkout develop
-git pull origin develop
+git checkout main
+git pull origin main
 npm ci
 npm run build
 ```
 
-Feature:
+После правки на PROD / в репозитории:
 
 ```bash
-git checkout -b feature/TW-CONTENT-XXX-short-name
-# work…
+git checkout -b feature/TW-CONTENT-XXX-short-name   # или chore/content-…
 git commit -m "TW-CONTENT-XXX: description"
 git push -u origin feature/TW-CONTENT-XXX-short-name
-# gh pr create --base develop
+gh pr create --base main
 ```
+
+Мелкие контентные правки можно вести в короткой ветке от `main` и смержить одним PR (squash).
 
 ## Deploy (research.timewoven.ru)
 
-- **Static only:** `npm run build` → `dist/` → `/var/www/research.timewoven.ru` (см. `docs/TW-CONTENT-005_DEPLOY_RECORD.md`).
+- **Static:** `npm run build` → `dist/` → `/var/www/research.timewoven.ru` (см. `docs/TW-CONTENT-005_DEPLOY_RECORD.md`).
 - **Не трогать:** `timewoven.ru`, `app.timewoven.ru`, `admin.timewoven.ru`.
 
 ## CI
 
-PR в `develop` / `main` требуют check **`quality`** (`.github/workflows/ci.yml`).
+PR и push в **`main`** требуют check **`quality`** (`.github/workflows/ci.yml`).

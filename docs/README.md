@@ -34,6 +34,10 @@
 - **Rollback SHA:** `c006d88ac3ed7a490cfb3ac68ab2351df958db41`
 - **Nginx reference:** [nginx/research.timewoven.ru.conf](./nginx/research.timewoven.ru.conf)
 
+## GitHub governance
+
+- **TW-RESEARCH-GITHUB-001** — editorial model: `feature/*` → **`main`** (см. `docs/TW-RESEARCH-GITHUB-001.md`)
+
 ## Следующая волна
 
 **TW-CONTENT-004** — новые публикации (разблокировано после 003/003A).
