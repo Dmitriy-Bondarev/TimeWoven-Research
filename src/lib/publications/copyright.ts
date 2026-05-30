@@ -16,6 +16,11 @@ const COPYRIGHT_BY_LOCALE: Partial<Record<Locale, CopyrightModel>> = {
     body:
       'Materials from the library may be quoted in full or in part only with proper attribution of the author and an active link to the original source. When using materials in printed, electronic, or other publications, a reference to the original source is required. All rights to original texts, research structures, and editorial materials belong to TimeWoven.',
   },
+  zh: {
+    heading: '© TimeWoven Research.',
+    body:
+      '本馆材料可在完整或部分引用时使用，但须注明作者并提供指向原文的有效链接。在印刷品、电子出版物或其他出版物中使用本馆材料时，必须注明原始出处。TimeWoven 保留所有原创文本、研究结构与编辑材料的相关权利。',
+  },
 };
 
 export function getCopyrightModel(locale: Locale): CopyrightModel | null {

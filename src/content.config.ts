@@ -80,6 +80,9 @@ const authors = defineCollection({
     nameEn: z.string().optional(),
     roleEn: z.string().optional(),
     bioEn: z.string().optional(),
+    nameZh: z.string().optional(),
+    roleZh: z.string().optional(),
+    bioZh: z.string().optional(),
   }),
 });
 

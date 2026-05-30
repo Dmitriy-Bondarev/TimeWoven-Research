@@ -18,7 +18,7 @@ export function getAuthorProfile(
   author: CollectionEntry<'authors'>,
   locale: Locale,
 ): AuthorProfile {
-  const { name, role, bio, nameEn, roleEn, bioEn } = author.data;
+  const { name, role, bio, nameEn, roleEn, bioEn, nameZh, roleZh, bioZh } = author.data;
 
   if (locale === 'en' && nameEn) {
     return {
@@ -28,5 +28,24 @@ export function getAuthorProfile(
     };
   }
 
+  if (locale === 'zh' && nameZh) {
+    return {
+      name: nameZh,
+      role: roleZh ?? role,
+      bio: bioZh ?? bio,
+    };
+  }
+
   return { name, role, bio };
+}
+
+/** Latin-script name for citation blocks (EN/ZH use nameEn when available). */
+export function getAuthorCitationName(
+  author: CollectionEntry<'authors'>,
+  locale: Locale,
+): string {
+  if ((locale === 'en' || locale === 'zh') && author.data.nameEn) {
+    return author.data.nameEn;
+  }
+  return getAuthorProfile(author, locale).name;
 }

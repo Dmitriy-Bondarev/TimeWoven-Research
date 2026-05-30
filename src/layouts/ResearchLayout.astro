@@ -9,7 +9,7 @@ import PublicationCopyright from '../components/PublicationCopyright.astro';
 import LanguageCoverage from '../components/LanguageCoverage.astro';
 import { render, type CollectionEntry } from 'astro:content';
 import { getPublicationById, getResearch, getTranslationMatrixRow, publicationPath } from '../lib/publications';
-import { getAuthorById, getAuthorProfile } from '../lib/authors';
+import { getAuthorById, getAuthorProfile, getAuthorCitationName } from '../lib/authors';
 import type { Locale } from '../lib/i18n/languages';
 import { t } from '../lib/i18n/messages';
 
@@ -74,7 +74,7 @@ const { Content } = await render(entry);
             locale={locale}
             identity={identity}
             entry={entry}
-            authorName={authorProfile.name}
+            authorName={getAuthorCitationName(author, locale)}
             title={title}
           />
           <PublicationCopyright locale={locale} />

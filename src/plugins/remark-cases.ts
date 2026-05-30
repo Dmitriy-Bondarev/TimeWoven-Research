@@ -10,14 +10,18 @@ function escapeHtml(text: string): string {
 }
 
 function isCaseHeading(node: RootContent): node is Heading {
-  return node.type === 'heading' && node.depth === 3 && /^(?:Кейс|Case)\s+\d+:/i.test(toString(node));
+  return (
+    node.type === 'heading' &&
+    node.depth === 3 &&
+    /^(?:Кейс|Case|案例)\s*\d+\s*[：:]/i.test(toString(node))
+  );
 }
 
 function parseCaseHeading(node: Heading): { num: string; title: string; label: string } | null {
   const text = toString(node).trim();
-  const match = text.match(/^(?:Кейс|Case)\s+(\d+):\s*(.+)$/i);
+  const match = text.match(/^(?:Кейс|Case|案例)\s*(\d+)\s*[：:]\s*(.+)$/i);
   if (!match) return null;
-  const label = /^Case\s+\d+/i.test(text) ? 'Case' : 'Кейс';
+  const label = /^Case\s+\d+/i.test(text) ? 'Case' : /^案例\s*\d+/i.test(text) ? '案例' : 'Кейс';
   return { num: match[1], title: match[2].trim(), label };
 }
 

@@ -49,14 +49,15 @@ export function buildCitation(model: CitationModel): {
 } {
   const authorSegment = formatAuthorForCitation(model.authorName, model.locale);
   const imprint = t(model.locale, 'citation.imprint');
+  const zh = model.locale === 'zh';
 
   return {
     heading: t(model.locale, 'citation.heading'),
     authorSegment,
-    titleSegment: `${model.title}.`,
+    titleSegment: zh ? model.title : `${model.title}.`,
     imprintSegment: imprint,
     publicationId: model.publicationId,
-    yearSegment: `${model.publicationYear}.`,
+    yearSegment: zh ? `${model.publicationYear}` : `${model.publicationYear}.`,
     permanentUrlLabel: t(model.locale, 'citation.permanentUrl'),
     permanentUrl: model.permanentUrl,
   };
