@@ -1,0 +1,29 @@
+# TimeWoven Research (Astro SSG) — Implementation agent
+
+Проект: статическая библиотека **https://research.timewoven.ru** (отдельный repo от FastAPI TimeWoven).
+
+## Git (как TimeWoven, TW-GOV-004)
+
+- **`feature/*` → `develop`:** PR + **Squash merge only**
+- **`develop` → `main`:** release PR + **merge commit only**
+- **No direct push / force push to `main`**
+- Канон: **`docs/core/Rules_of_work.md`**
+
+## Scope
+
+- Задачи **TW-CONTENT-*** только в этом репозитории.
+- Не менять код **`Dmitriy-Bondarev/TimeWoven`** без отдельной задачи.
+- Deploy research: static `dist/` + nginx; не трогать app/admin/timewoven.ru runtime.
+
+## Docs
+
+- Индекс волн: **`docs/README.md`**
+- После изменений кода: обновлять релевантный **`docs/TW-CONTENT-*.md`** (VERIFY / STATUS).
+
+## MAC
+
+```bash
+cd ~/Projects/TimeWoven-Research/timewoven-research
+npm run build
+npm run verify:citations
+```
