@@ -2,6 +2,8 @@
 title: "Почему память семьи исчезает уже в третьем поколении"
 description: "Социокультурный анализ механизмов утраты семейной памяти, коммуникативной памяти и межпоколенческой трансмиссии."
 publicationId: "TW-R-0001"
+publicationType: "research"
+publicationDate: "2026-05-30"
 locale: "ru"
 slug: "family-memory-third-generation"
 contentType: "research"

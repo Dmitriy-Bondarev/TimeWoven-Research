@@ -4,8 +4,10 @@ import ResearchHero from '../components/ResearchHero.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 import ResearchCTA from '../components/ResearchCTA.astro';
 import RelatedResearch from '../components/RelatedResearch.astro';
+import PublicationCitation from '../components/PublicationCitation.astro';
+import PublicationCopyright from '../components/PublicationCopyright.astro';
 import { render, type CollectionEntry } from 'astro:content';
-import { getResearch, publicationPath } from '../lib/publications';
+import { getPublicationById, getResearch, publicationPath } from '../lib/publications';
 import { getAuthorById } from '../lib/authors';
 import type { Locale } from '../lib/i18n/languages';
 import { t } from '../lib/i18n/messages';
@@ -30,6 +32,7 @@ const pageTitle = seoTitle ?? title;
 const description = seoDescription ?? entry.data.description;
 const canonicalPath = publicationPath(entry, locale);
 const author = await getAuthorById(authorId);
+const identity = await getPublicationById(entry.data.publicationId);
 const allResearch = await getResearch(locale);
 const { Content } = await render(entry);
 ---
@@ -60,6 +63,21 @@ const { Content } = await render(entry);
         <Content />
       </div>
     </div>
+
+    {
+      identity && author && (
+        <>
+          <PublicationCitation
+            locale={locale}
+            identity={identity}
+            entry={entry}
+            authorName={author.data.name}
+            title={title}
+          />
+          <PublicationCopyright locale={locale} />
+        </>
+      )
+    }
 
     <footer class="research-page-footer">
       {author && <AuthorCard author={author} locale={locale} />}

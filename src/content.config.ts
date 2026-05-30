@@ -12,9 +12,15 @@ export const publicationIdSchema = z.string().regex(/^TW-(R|A|E)-\d{4}$/, {
   message: 'publicationId must match TW-R-0001 / TW-A-0001 / TW-E-0001',
 });
 
+export const publicationTypeSchema = z.enum(['research', 'essay', 'article']);
+
 export const publicationSchema = z.object({
   /** Stable identity across locales (TW-CONTENT-I18N-001). */
   publicationId: publicationIdSchema,
+  /** Canonical publication type; defaults from contentType / publicationId prefix. */
+  publicationType: publicationTypeSchema.optional(),
+  /** Canonical publication date for citation; defaults to publishedAt. */
+  publicationDate: z.coerce.date().optional(),
   /** Locale of this representation; default RU for legacy entries. */
   locale: localeSchema.default('ru'),
   title: z.string(),

@@ -1,0 +1,46 @@
+---
+import type { Locale } from '../lib/i18n/languages';
+import {
+  buildCitation,
+  formatCitationYear,
+  getPermanentPublicationUrl,
+  resolvePublicationDate,
+  type PublicationIdentity,
+  type PublicationEntry,
+} from '../lib/publications';
+
+interface Props {
+  locale: Locale;
+  identity: PublicationIdentity;
+  entry: PublicationEntry;
+  authorName: string;
+  title: string;
+}
+
+const { locale, identity, entry, authorName, title } = Astro.props;
+const citation = buildCitation({
+  locale,
+  authorName,
+  title,
+  publicationId: identity.publicationId,
+  publicationYear: formatCitationYear(resolvePublicationDate(entry.data)),
+  permanentUrl: getPermanentPublicationUrl(identity),
+});
+---
+
+<section class="research-citation" aria-labelledby="research-citation-title">
+  <h2 id="research-citation-title" class="research-citation-title research-eyebrow">
+    {citation.heading}
+  </h2>
+  <div class="research-citation-body">
+    {
+      citation.lines.map((line) => (
+        <p class="research-citation-line">{line}</p>
+      ))
+    }
+    <p class="research-citation-permalink-label">{citation.permanentUrlLabel}</p>
+    <p class="research-citation-permalink">
+      <a href={citation.permanentUrl}>{citation.permanentUrl}</a>
+    </p>
+  </div>
+</section>

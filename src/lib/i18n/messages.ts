@@ -86,6 +86,9 @@ const messages = {
     'fallback.publicationId': 'ID публикации',
     'fallback.backResearch': 'К исследованиям',
     'fallback.backHome': 'На главную',
+    'citation.heading': 'Цитирование',
+    'citation.imprint': 'TimeWoven Research.',
+    'citation.permanentUrl': 'Постоянная ссылка:',
   },
   en: {
     'site.name': 'TimeWoven Project',
@@ -169,6 +172,9 @@ const messages = {
     'fallback.publicationId': 'Publication ID',
     'fallback.backResearch': 'Back to research',
     'fallback.backHome': 'Home',
+    'citation.heading': 'How to cite',
+    'citation.imprint': 'TimeWoven Research.',
+    'citation.permanentUrl': 'Permanent URL:',
   },
   zh: {
     'site.name': 'TimeWoven 项目',
@@ -243,6 +249,9 @@ const messages = {
     'fallback.publicationId': '出版物 ID',
     'fallback.backResearch': '返回研究',
     'fallback.backHome': '首页',
+    'citation.heading': '引用',
+    'citation.imprint': 'TimeWoven Research.',
+    'citation.permanentUrl': '永久链接：',
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 
