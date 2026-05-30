@@ -39,24 +39,24 @@ export function formatCitationYear(date: Date): number {
 
 export function buildCitation(model: CitationModel): {
   heading: string;
-  lines: string[];
+  authorSegment: string;
+  titleSegment: string;
+  imprintSegment: string;
+  publicationId: string;
+  yearSegment: string;
   permanentUrlLabel: string;
   permanentUrl: string;
 } {
-  const authorLine = formatAuthorForCitation(model.authorName, model.locale);
+  const authorSegment = formatAuthorForCitation(model.authorName, model.locale);
   const imprint = t(model.locale, 'citation.imprint');
-
-  const lines = [
-    authorLine,
-    `${model.title}.`,
-    imprint,
-    model.publicationId,
-    `${model.publicationYear}.`,
-  ].filter(Boolean);
 
   return {
     heading: t(model.locale, 'citation.heading'),
-    lines,
+    authorSegment,
+    titleSegment: `${model.title}.`,
+    imprintSegment: imprint,
+    publicationId: model.publicationId,
+    yearSegment: `${model.publicationYear}.`,
     permanentUrlLabel: t(model.locale, 'citation.permanentUrl'),
     permanentUrl: model.permanentUrl,
   };

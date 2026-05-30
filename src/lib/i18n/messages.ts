@@ -89,6 +89,7 @@ const messages = {
     'citation.heading': 'Цитирование',
     'citation.imprint': 'TimeWoven Research.',
     'citation.permanentUrl': 'Постоянная ссылка:',
+    'publication.metaAria': 'Служебная информация о публикации',
   },
   en: {
     'site.name': 'TimeWoven Project',
@@ -175,6 +176,7 @@ const messages = {
     'citation.heading': 'How to cite',
     'citation.imprint': 'TimeWoven Research.',
     'citation.permanentUrl': 'Permanent URL:',
+    'publication.metaAria': 'Publication metadata',
   },
   zh: {
     'site.name': 'TimeWoven 项目',
@@ -252,6 +254,7 @@ const messages = {
     'citation.heading': '引用',
     'citation.imprint': 'TimeWoven Research.',
     'citation.permanentUrl': '永久链接：',
+    'publication.metaAria': '出版物信息',
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

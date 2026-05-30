@@ -66,7 +66,7 @@ const { Content } = await render(entry);
 
     {
       identity && author && (
-        <>
+        <aside class="research-publication-meta" aria-label={t(locale, 'publication.metaAria')}>
           <PublicationCitation
             locale={locale}
             identity={identity}
@@ -75,7 +75,7 @@ const { Content } = await render(entry);
             title={title}
           />
           <PublicationCopyright locale={locale} />
-        </>
+        </aside>
       )
     }
 

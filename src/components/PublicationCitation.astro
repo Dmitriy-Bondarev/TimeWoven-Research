@@ -33,11 +33,17 @@ const citation = buildCitation({
     {citation.heading}
   </h2>
   <div class="research-citation-body">
-    {
-      citation.lines.map((line) => (
-        <p class="research-citation-line">{line}</p>
-      ))
-    }
+    <p class="research-citation-line">
+      {citation.authorSegment}
+      {' '}
+      {citation.titleSegment}
+      {' '}
+      {citation.imprintSegment}
+      {' '}
+      <span class="research-citation-id">{citation.publicationId}</span>.
+      {' '}
+      {citation.yearSegment}
+    </p>
     <p class="research-citation-permalink-label">{citation.permanentUrlLabel}</p>
     <p class="research-citation-permalink">
       <a href={citation.permanentUrl}>{citation.permanentUrl}</a>

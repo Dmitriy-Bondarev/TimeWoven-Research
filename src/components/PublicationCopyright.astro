@@ -16,9 +16,7 @@ const copyright = getCopyrightModel(locale);
       <h2 id="research-copyright-title" class="research-copyright-heading">
         {copyright.heading}
       </h2>
-      {copyright.paragraphs.map((paragraph) => (
-        <p class="research-copyright-paragraph">{paragraph}</p>
-      ))}
+      <p class="research-copyright-body">{copyright.body}</p>
     </section>
   )
 }
