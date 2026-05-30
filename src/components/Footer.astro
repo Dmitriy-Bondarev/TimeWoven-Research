@@ -1,0 +1,40 @@
+---
+import { SITE_NAME } from '../lib/site';
+
+interface Props {
+  variant?: 'default' | 'library';
+}
+
+const { variant = 'default' } = Astro.props;
+const isLibrary = variant === 'library';
+---
+
+<footer
+  class:list={[
+    'mt-auto border-t',
+    isLibrary ? 'library-footer border-[var(--library-line,#e8e4dc)]' : 'border-neutral-200',
+  ]}
+>
+  <div
+    class:list={[
+      'mx-auto px-4 py-8',
+      isLibrary ? 'library-footer-inner max-w-[42rem]' : 'max-w-3xl py-6 text-sm text-neutral-500',
+    ]}
+  >
+    {
+      isLibrary ? (
+        <>
+          <p class="library-footer-brand">{SITE_NAME}</p>
+          <nav class="library-footer-nav" aria-label="Разделы библиотеки">
+            <a href="/">Главная</a>
+            <a href="/research">Исследования</a>
+            <a href="/essays">Эссе</a>
+            <a href="/articles">Статьи</a>
+          </nav>
+        </>
+      ) : (
+        <p>{SITE_NAME}</p>
+      )
+    }
+  </div>
+</footer>

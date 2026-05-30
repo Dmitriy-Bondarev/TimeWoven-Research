@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatPublicationDate } from '../lib/dates';
+import { publicationPath } from '../lib/publications';
+
+interface Props {
+  currentSlug: string;
+  items?: CollectionEntry<'research'>[];
+}
+
+const { currentSlug, items = [] } = Astro.props;
+const related = items.filter((e) => e.data.slug !== currentSlug).slice(0, 3);
+---
+
+<section class="research-related">
+  <h2 class="research-related-title">Другие исследования</h2>
+  {
+    related.length > 0 ? (
+      <ul class="research-related-list">
+        {related.map((entry) => (
+          <li class="research-related-item">
+            <a href={publicationPath(entry)} class="research-related-link">
+              <span class="research-related-link-title">{entry.data.title}</span>
+              <span class="research-related-link-meta">
+                {formatPublicationDate(entry.data.publishedAt)}
+                {entry.data.readingTime != null && (
+                  <span> · {entry.data.readingTime} мин</span>
+                )}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="research-related-empty">Другие исследования появятся здесь.</p>
+    )
+  }
+</section>

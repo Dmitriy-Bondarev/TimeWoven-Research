@@ -1,0 +1,22 @@
+---
+interface Props {
+  message: string;
+  note?: string;
+}
+
+const { message, note } = Astro.props;
+const noteParagraphs = note ? note.split(/\n\n+/).map((p) => p.trim()).filter(Boolean) : [];
+---
+
+<div class="library-empty" role="status">
+  <p class="library-empty-message">{message}</p>
+  {
+    noteParagraphs.length > 0 && (
+      <div class="library-empty-note">
+        {noteParagraphs.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    )
+  }
+</div>

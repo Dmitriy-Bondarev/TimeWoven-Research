@@ -1,0 +1,66 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ResearchHero from '../components/ResearchHero.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+import ResearchCTA from '../components/ResearchCTA.astro';
+import RelatedResearch from '../components/RelatedResearch.astro';
+import { render, type CollectionEntry } from 'astro:content';
+import { getResearch } from '../lib/publications';
+import { SITE_NAME } from '../lib/site';
+import { getAuthorById } from '../lib/authors';
+
+interface Props {
+  entry: CollectionEntry<'research'>;
+}
+
+const { entry } = Astro.props;
+const {
+  title,
+  author: authorId,
+  publishedAt,
+  readingTime,
+  seoTitle,
+  seoDescription,
+  ogImage,
+} = entry.data;
+
+const pageTitle = seoTitle ?? title;
+const description = seoDescription ?? entry.data.description;
+const canonicalPath = `/research/${entry.data.slug}`;
+const author = await getAuthorById(authorId);
+const allResearch = await getResearch();
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+  title={`${pageTitle} · ${SITE_NAME}`}
+  description={description}
+  canonicalPath={canonicalPath}
+  ogType="article"
+  ogTitle={pageTitle}
+  ogDescription={description}
+  ogImage={ogImage}
+  surface="research"
+>
+  <article class="research-page research-page--article tw-article">
+    <ResearchHero
+      title={title}
+      description={description}
+      authorName={author?.data.name}
+      publishedAt={publishedAt}
+      readingTime={readingTime}
+    />
+
+    <div class="research-article-shell">
+      <div class="research-prose">
+        <Content />
+      </div>
+    </div>
+
+    <footer class="research-page-footer">
+      {author && <AuthorCard author={author} />}
+      <ResearchCTA />
+      <RelatedResearch currentSlug={entry.data.slug} items={allResearch} />
+    </footer>
+  </article>
+</BaseLayout>

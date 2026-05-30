@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@import "./research-reading.css";
+@import "./article-template.css";
+@import "./library-home.css";
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.research-page-footer {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 0 4rem;
+}
+
+@media (min-width: 1024px) {
+  .research-page {
+    padding: 0 clamp(1rem, 3vw, 2rem);
+  }
+
+  .research-hero-inner,
+  .research-article-shell,
+  .research-page-footer {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

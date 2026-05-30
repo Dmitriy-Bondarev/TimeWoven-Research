@@ -1,0 +1,18 @@
+---
+interface Props {
+  class?: string;
+}
+---
+
+<div class:list={['research-cta', Astro.props.class]}>
+  <div class="research-cta-inner">
+    <p class="research-cta-text">
+      Память семьи исчезает тише, чем нам кажется. TimeWoven — спокойное пространство, где
+      можно сохранять истории, воспоминания и связи между поколениями, пока их ещё можно
+      услышать.
+    </p>
+    <a href="https://timewoven.ru" class="research-cta-link" rel="noopener noreferrer">
+      Узнать о проекте →
+    </a>
+  </div>
+</div>

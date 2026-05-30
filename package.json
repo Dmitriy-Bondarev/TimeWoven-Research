@@ -9,9 +9,28 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "screenshots:002c": "node scripts/capture-tw-content-002c-screenshots.mjs",
+    "screenshots:002c-fix": "node scripts/capture-tw-content-002c-fix-screenshots.mjs",
+    "screenshots:002c-fixa": "node scripts/capture-tw-content-002c-fixa-screenshots.mjs",
+    "screenshots:002c-style-audit": "node scripts/capture-tw-content-002c-style-audit-screenshots.mjs",
+    "screenshots:002d": "node scripts/capture-tw-content-002d-screenshots.mjs",
+    "screenshots:003": "node scripts/capture-tw-content-003-screenshots.mjs",
+    "verify:citations": "node --experimental-strip-types scripts/verify-citation-punctuation.mjs",
+    "screenshots:003a-fix-header": "node scripts/capture-tw-content-003a-fix-header-screenshots.mjs"
   },
   "dependencies": {
-    "astro": "^6.4.2"
+    "@astrojs/sitemap": "^3.7.3",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.4.2",
+    "mdast-util-to-string": "^4.0.0",
+    "rehype-raw": "^7.0.0",
+    "remark-directive": "^4.0.0",
+    "tailwindcss": "^4.3.0",
+    "unist-util-is": "^6.0.1",
+    "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.52.0"
   }
 }

@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  author: CollectionEntry<'authors'>;
+}
+
+const { author } = Astro.props;
+const { name, role, bio } = author.data;
+---
+
+<section class="research-author" aria-labelledby="research-author-heading">
+  <h2 id="research-author-heading" class="sr-only">Об авторе</h2>
+  <div class="research-author-inner">
+    <p class="research-author-label">Автор</p>
+    <p class="research-author-name">{name}</p>
+    <p class="research-author-role">{role}</p>
+    <p class="research-author-bio">{bio}</p>
+  </div>
+</section>
