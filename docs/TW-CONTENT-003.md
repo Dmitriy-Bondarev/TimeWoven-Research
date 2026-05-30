@@ -2,7 +2,7 @@
 
 **Actual as of:** 2026-05-19  
 **Environment:** MAC ONLY (`timewoven-research`)  
-**Status:** IMPLEMENTED — superseded by **TW-CONTENT-003A** (copy + footnote fix). **CLOSED** after owner approves 003A.
+**Status:** **CLOSED** (003A merged; PROD deploy **TW-CONTENT-005**).
 
 ## Prerequisites (declared)
 
@@ -48,14 +48,12 @@
 | Template Governance | PASS |
 | Review Package | PASS (after `npm run build && npm run screenshots:003`) |
 | `npm run build` | PASS (run in session) |
-| Owner Review | **REQUIRED** |
+| Owner Review | APPROVED (2026-05-19) |
 
-## Blocking
+## Blocking (historical)
 
-- **TW-CONTENT-004** — BLOCKED until owner approves TW-CONTENT-003
-- **TW-CONTENT-005** — BLOCKED
-
-No new research publications until approval.
+- **TW-CONTENT-004** — was blocked until 003/003A; **unblocked** after closeout
+- **TW-CONTENT-005** — deploy completed; see [TW-CONTENT-005_DEPLOY_RECORD.md](./TW-CONTENT-005_DEPLOY_RECORD.md)
 
 ## Commands
 

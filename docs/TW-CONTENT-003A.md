@@ -2,7 +2,7 @@
 
 **Actual as of:** 2026-05-19  
 **Environment:** MAC ONLY (`timewoven-research`)  
-**Status:** IMPLEMENTED — **Owner Review: REQUIRED**
+**Status:** **CLOSED** (owner approved 2026-05-19)
 
 ## Scope
 
@@ -46,7 +46,7 @@
 | Footnote Punctuation | PASS |
 | Regression | PASS (`npm run verify:citations`) |
 | `npm run build` | PASS |
-| Owner Review | **REQUIRED** |
+| Owner Review | APPROVED (2026-05-19) |
 
 ## Commands
 
