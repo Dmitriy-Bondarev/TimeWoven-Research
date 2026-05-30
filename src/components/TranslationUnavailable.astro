@@ -1,7 +1,9 @@
 ---
+import LanguageCoverage from './LanguageCoverage.astro';
 import type { Locale } from '../lib/i18n/languages';
 import { contentSectionPath, localePath, publicationDetailPath } from '../lib/i18n/paths';
-import { t } from '../lib/i18n/messages';
+import { t, type MessageKey } from '../lib/i18n/messages';
+import { getTranslationMatrixRow } from '../lib/publications';
 
 interface Props {
   locale: Locale;
@@ -10,24 +12,33 @@ interface Props {
 }
 
 const { locale, publicationId, slug } = Astro.props;
+const row = await getTranslationMatrixRow(publicationId);
+const noticeKey = `translation.notice.${locale}` as MessageKey;
 ---
 
 <section class="library-fallback" aria-labelledby="translation-unavailable-title">
   <p class="library-eyebrow">{t(locale, 'publication.type.research')}</p>
   <h1 id="translation-unavailable-title" class="library-hero-title">{t(locale, 'fallback.title')}</h1>
-  <p class="library-hero-lead">{t(locale, 'fallback.message')}</p>
+  <p class="library-hero-lead">{t(locale, noticeKey)}</p>
   <p class="library-fallback-id">
     {t(locale, 'fallback.publicationId')}: <code>{publicationId}</code>
   </p>
+  {
+    row && (
+      <div class="library-fallback-coverage">
+        <LanguageCoverage locale={locale} row={row} currentLocale={locale} />
+      </div>
+    )
+  }
   <p class="library-fallback-links">
     <a href={contentSectionPath(locale, 'research')}>{t(locale, 'fallback.backResearch')}</a>
     <span aria-hidden="true"> · </span>
     <a href={localePath(locale, '/')}>{t(locale, 'fallback.backHome')}</a>
     {
-      locale !== 'ru' && (
+      row?.availableLocales.includes('ru') && locale !== 'ru' && (
         <>
           <span aria-hidden="true"> · </span>
-          <a href={publicationDetailPath('ru', 'research', slug)}>{t('ru', 'publication.readCta')}</a>
+          <a href={publicationDetailPath('ru', row.section, slug)}>{t('ru', 'publication.readCta')}</a>
         </>
       )
     }
@@ -47,6 +58,10 @@ const { locale, publicationId, slug } = Astro.props;
 
   .library-fallback-id code {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .library-fallback-coverage {
+    margin-top: 1.25rem;
   }
 
   .library-fallback-links {

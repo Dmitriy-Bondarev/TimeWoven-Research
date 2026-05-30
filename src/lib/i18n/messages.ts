@@ -90,6 +90,10 @@ const messages = {
     'citation.imprint': 'TimeWoven Research.',
     'citation.permanentUrl': 'Постоянная ссылка:',
     'publication.metaAria': 'Служебная информация о публикации',
+    'coverage.heading': 'Доступные языки',
+    'translation.notice.ru': 'Эта публикация пока не переведена на русский язык.',
+    'translation.notice.en': 'This publication has not yet been translated into English.',
+    'translation.notice.zh': '该出版物暂未提供中文版本。',
   },
   en: {
     'site.name': 'TimeWoven',
@@ -177,6 +181,10 @@ const messages = {
     'citation.imprint': 'TimeWoven Research.',
     'citation.permanentUrl': 'Permanent link:',
     'publication.metaAria': 'Publication metadata',
+    'coverage.heading': 'Available languages',
+    'translation.notice.ru': 'This publication has not yet been translated into Russian.',
+    'translation.notice.en': 'This publication has not yet been translated into English.',
+    'translation.notice.zh': 'This publication has not yet been translated into Chinese.',
   },
   zh: {
     'site.name': 'TimeWoven 项目',
@@ -255,6 +263,10 @@ const messages = {
     'citation.imprint': 'TimeWoven Research.',
     'citation.permanentUrl': '永久链接：',
     'publication.metaAria': '出版物信息',
+    'coverage.heading': '可用语言',
+    'translation.notice.ru': '该出版物暂未提供俄语版本。',
+    'translation.notice.en': '该出版物暂未提供英语版本。',
+    'translation.notice.zh': '该出版物暂未提供中文版本。',
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

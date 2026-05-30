@@ -7,6 +7,8 @@ export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 export type LocaleMeta = {
   label: string;
+  /** Human-readable name in language coverage blocks. */
+  coverageLabel: string;
   htmlLang: string;
   ogLocale: string;
   /** URL prefix; empty for default locale (RU). */
@@ -16,18 +18,21 @@ export type LocaleMeta = {
 export const LOCALE_REGISTRY: Record<Locale, LocaleMeta> = {
   ru: {
     label: 'RU',
+    coverageLabel: 'Русский',
     htmlLang: 'ru',
     ogLocale: 'ru_RU',
     prefix: '',
   },
   en: {
     label: 'EN',
+    coverageLabel: 'English',
     htmlLang: 'en',
     ogLocale: 'en_US',
     prefix: '/en',
   },
   zh: {
     label: '中文',
+    coverageLabel: '中文',
     htmlLang: 'zh-Hans',
     ogLocale: 'zh_CN',
     prefix: '/zh',

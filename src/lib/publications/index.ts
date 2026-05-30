@@ -41,6 +41,21 @@ export {
 
 export { buildCitation, formatAuthorForCitation, formatCitationYear, type CitationModel } from './citation';
 export { getCopyrightModel, hasCopyright, type CopyrightModel } from './copyright';
+export {
+  isLiveStatus,
+  isMatrixAvailable,
+  matrixStatus,
+  resolveLocaleStatus,
+  type LocaleStatusMap,
+  type PublicationLocaleStatus,
+} from './publication-status';
+export {
+  getTranslationMatrix,
+  getTranslationMatrixRow,
+  matrixCellSymbol,
+  matrixStatusForLocale,
+  type TranslationMatrixRow,
+} from './translation-matrix';
 
 export { getResearchRegistry, registryDetailPath };
 
