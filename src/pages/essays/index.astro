@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE_NAME } from '../../lib/site';
+import LibraryEmptyState from '../../components/LibraryEmptyState.astro';
+import PublicationCard from '../../components/PublicationCard.astro';
+import { getEssays } from '../../lib/publications';
+
+const essays = await getEssays();
+---
+
+<BaseLayout
+  title={`Эссе · ${SITE_NAME}`}
+  description="Эссе о семейной памяти, преемственности поколений и личном опыте сохранения истории рода."
+  canonicalPath="/essays"
+  surface="library"
+>
+  <div class="library-page">
+    <header class="library-catalog-header">
+      <p class="library-eyebrow">Раздел</p>
+      <h1 class="library-hero-title library-catalog-header-title">Эссе</h1>
+      <p class="library-hero-lead library-catalog-header-lead">
+        Размышляем о семье и памяти. Бережно и со смыслом.
+      </p>
+    </header>
+
+    <section class="library-section">
+      {
+        essays.length > 0 ? (
+          <ul class="library-catalog-list">
+            {essays.map((entry) => (
+              <li>
+                <PublicationCard entry={entry} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <LibraryEmptyState
+            message="Первые эссе появятся здесь."
+            note={`В этом разделе мы будем делиться живыми историями о памяти рода — они дополнят наши более строгие исследования.
+
+Пока тексты готовятся, вы можете почитать раздел «Исследования» или вернуться на главную.`}
+          />
+        )
+      }
+      <p class="library-catalog-back">
+        <a href="/research">Исследования</a>
+        <span aria-hidden="true"> · </span>
+        <a href="/">Главная библиотеки</a>
+      </p>
+    </section>
+  </div>
+</BaseLayout>

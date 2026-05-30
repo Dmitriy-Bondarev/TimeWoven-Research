@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatPublicationDate } from '../lib/dates';
+import { publicationPath } from '../lib/publications';
+
+interface Props {
+  entry: CollectionEntry<'research'> | CollectionEntry<'articles'> | CollectionEntry<'essays'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, publishedAt, readingTime, featured } = entry.data;
+
+const typeLabel =
+  entry.data.contentType === 'research'
+    ? 'Исследование'
+    : entry.data.contentType === 'essay'
+      ? 'Эссе'
+      : 'Статья';
+---
+
+<article class="library-publication-card">
+  <a href={publicationPath(entry)} class="library-featured-card">
+    {featured && <p class="library-featured-badge">Избранное · {typeLabel}</p>}
+    {!featured && <p class="library-featured-badge">{typeLabel}</p>}
+    <h2 class="library-featured-title">{title}</h2>
+    <p class="library-featured-desc">{description}</p>
+    <p class="library-featured-meta">
+      <span>{formatPublicationDate(publishedAt)}</span>
+      {readingTime != null && <span>{readingTime} мин чтения</span>}
+    </p>
+    <p class="library-featured-cta">Читать →</p>
+  </a>
+</article>

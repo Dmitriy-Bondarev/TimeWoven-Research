@@ -1,0 +1,46 @@
+---
+import { formatPublicationDate } from '../lib/dates';
+
+interface Props {
+  title: string;
+  description: string;
+  authorName?: string;
+  publishedAt: Date;
+  readingTime?: number;
+}
+
+const { title, description, authorName, publishedAt, readingTime } = Astro.props;
+---
+
+<header class="research-hero">
+  <div class="research-hero-inner">
+    <p class="research-hero-category">Исследование</p>
+    <h1 class="research-hero-title">{title}</h1>
+    <p class="research-hero-description">{description}</p>
+    <dl class="research-hero-meta">
+      {
+        authorName && (
+          <div class="research-hero-meta-item">
+            <dt>Автор</dt>
+            <dd>{authorName}</dd>
+          </div>
+        )
+      }
+      <div class="research-hero-meta-item">
+        <dt>Опубликовано</dt>
+        <dd>
+          <time datetime={publishedAt.toISOString()}>{formatPublicationDate(publishedAt)}</time>
+        </dd>
+      </div>
+      {
+        readingTime != null && (
+          <div class="research-hero-meta-item">
+            <dt>Чтение</dt>
+            <dd>{readingTime} мин</dd>
+          </div>
+        )
+      }
+    </dl>
+    <div class="research-hero-divider" aria-hidden="true"></div>
+  </div>
+</header>

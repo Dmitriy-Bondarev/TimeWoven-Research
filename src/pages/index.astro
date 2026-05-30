@@ -1,17 +1,106 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_NAME } from '../lib/site';
+import { getFeaturedResearch } from '../lib/publications';
+import { formatPublicationDate } from '../lib/dates';
+import { publicationPath } from '../lib/publications';
 
+const featured = await getFeaturedResearch();
+const lead = featured[0];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title={`${SITE_NAME} — библиотека о семейной памяти`}
+  description="Исследования и тексты о том, как семейная память передаётся между поколениями — и почему она исчезает."
+  surface="library"
+>
+  <div class="library-page">
+    <section class="library-hero">
+      <div class="library-hero-inner">
+        <p class="library-eyebrow">{SITE_NAME}</p>
+        <h1 class="library-hero-title">Библиотека о семейной памяти</h1>
+        <p class="library-hero-lead">
+          Здесь собраны исследования и тексты о том, как память рода живёт в семье — и почему
+          она часто не доходит до третьего поколения.
+        </p>
+        <p class="library-hero-purpose">
+          Материалы предназначены для вдумчивого чтения: без спешки, без упрощения до новостной
+          ленты.
+        </p>
+      </div>
+    </section>
+
+    <section class="library-mission" aria-labelledby="library-mission-title">
+      <div class="library-mission-inner">
+        <h2 id="library-mission-title" class="library-mission-title">Зачем эта библиотека</h2>
+        <p class="library-mission-text">
+          Семейная память — не архив фотографий и не родословная ради галочки. Это то, как мы
+          понимаем, откуда мы пришли и что можем передать дальше.
+        </p>
+        <p class="library-mission-text">
+          Проект TimeWoven помогает читать и сохранять эту память всерьёз: через глубокие
+          исследования, эссе и короткие материалы, которые дополняют друг друга.
+        </p>
+      </div>
+    </section>
+
+    <section class="library-section" aria-labelledby="library-sections-title">
+      <h2 id="library-sections-title" class="library-section-title">Разделы</h2>
+      <ul class="library-sections-grid">
+        <li>
+          <a href="/research" class="library-section-card">
+            <span class="library-section-card-label">Исследования</span>
+            <span class="library-section-card-desc">
+              Развёрнутые аналитические тексты о механизмах памяти, поколениях и утрате связи.
+            </span>
+            <span class="library-section-card-link">Открыть раздел →</span>
+          </a>
+        </li>
+        <li>
+          <a href="/essays" class="library-section-card">
+            <span class="library-section-card-label">Эссе</span>
+            <span class="library-section-card-desc">
+              Спокойные размышления о семье, преемственности и личном опыте памяти.
+            </span>
+            <span class="library-section-card-link">Открыть раздел →</span>
+          </a>
+        </li>
+        <li>
+          <a href="/articles" class="library-section-card">
+            <span class="library-section-card-label">Статьи</span>
+            <span class="library-section-card-desc">
+              Короткие редакционные материалы — заметки и разборы рядом с исследованиями.
+            </span>
+            <span class="library-section-card-link">Открыть раздел →</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="library-section">
+      <div class="library-section-header">
+        <h2 class="library-section-title">Избранное исследование</h2>
+        <a href="/research" class="library-section-link">Все исследования</a>
+      </div>
+
+      {
+        lead ? (
+          <a href={publicationPath(lead)} class="library-featured-card">
+            <p class="library-featured-badge">Избранное · Исследование</p>
+            <h3 class="library-featured-title">{lead.data.title}</h3>
+            <p class="library-featured-desc">{lead.data.description}</p>
+            <p class="library-featured-meta">
+              <span>{formatPublicationDate(lead.data.publishedAt)}</span>
+              {lead.data.readingTime != null && (
+                <span>{lead.data.readingTime} мин чтения</span>
+              )}
+            </p>
+            <p class="library-featured-cta">Читать исследование →</p>
+          </a>
+        ) : (
+          <p class="library-empty-note">Исследования готовятся к публикации.</p>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

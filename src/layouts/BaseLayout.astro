@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, SITE_NAME } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  ogType?: 'website' | 'article';
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  surface?: 'default' | 'research' | 'library';
+}
+
+const {
+  title = SITE_NAME,
+  description = 'Исследования, эссе и материалы команды TimeWoven о семейной памяти и межпоколенческой преемственности.',
+  canonicalPath,
+  ogType = 'website',
+  ogTitle,
+  ogDescription,
+  ogImage,
+  surface = 'default',
+} = Astro.props;
+
+const path = canonicalPath ?? Astro.url.pathname;
+const canonical = new URL(path, SITE).href;
+const socialTitle = ogTitle ?? title;
+const socialDescription = ogDescription ?? description;
+const socialImage = ogImage ? new URL(ogImage, SITE).href : new URL('/favicon.svg', SITE).href;
+
+const mainClass =
+  surface === 'research'
+    ? 'flex-1 w-full px-4 sm:px-6 lg:px-8 py-0 sm:py-0'
+    : surface === 'library'
+      ? 'flex-1 w-full max-w-3xl mx-auto px-4 py-0 sm:py-4'
+      : 'flex-1 w-full max-w-3xl mx-auto px-4 py-8 sm:py-12';
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={socialTitle} />
+    <meta property="og:description" content={socialDescription} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:locale" content="ru_RU" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={socialTitle} />
+    <meta name="twitter:description" content={socialDescription} />
+  </head>
+  <body
+    class:list={[
+      'min-h-screen flex flex-col antialiased',
+      surface === 'research' || surface === 'library'
+        ? 'bg-[#faf9f7] text-[#1a1816]'
+        : 'bg-white text-neutral-900',
+    ]}
+  >
+    <Header minimal={surface === 'research' || surface === 'library'} />
+    <main class={mainClass}>
+      <slot />
+    </main>
+    <Footer variant={surface === 'library' || surface === 'research' ? 'library' : 'default'} />
+  </body>
+</html>
