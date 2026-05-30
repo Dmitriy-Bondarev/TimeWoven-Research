@@ -1,16 +1,12 @@
 ---
-import ResearchLayout from '../../layouts/ResearchLayout.astro';
-import { getResearch } from '../../lib/publications';
+import ResearchArticlePage from '../../views/ResearchArticlePage.astro';
+import { researchDetailStaticPaths } from '../../lib/i18n/static-paths';
 
 export async function getStaticPaths() {
-  const entries = await getResearch();
-  return entries.map((entry) => ({
-    params: { slug: entry.data.slug },
-    props: { entry },
-  }));
+  return researchDetailStaticPaths('ru');
 }
 
-const { entry } = Astro.props;
+const { locale, publicationId, slug } = Astro.props;
 ---
 
-<ResearchLayout entry={entry} />
+<ResearchArticlePage locale={locale} publicationId={publicationId} slug={slug} />

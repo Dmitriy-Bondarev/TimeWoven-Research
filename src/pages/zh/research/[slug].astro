@@ -1,0 +1,12 @@
+---
+import ResearchArticlePage from '../../../views/ResearchArticlePage.astro';
+import { researchDetailStaticPaths } from '../../../lib/i18n/static-paths';
+
+export async function getStaticPaths() {
+  return researchDetailStaticPaths('zh');
+}
+
+const { locale, publicationId, slug } = Astro.props;
+---
+
+<ResearchArticlePage locale={locale} publicationId={publicationId} slug={slug} />

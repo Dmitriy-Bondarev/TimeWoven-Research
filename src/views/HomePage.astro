@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/i18n/languages';
+import { getFeaturedResearch, publicationPath } from '../lib/publications';
+import { formatPublicationDate } from '../lib/dates';
+import { contentSectionPath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const featured = await getFeaturedResearch(locale);
+const lead = featured[0];
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t(locale, 'site.name')} — ${t(locale, 'home.seoTitleSuffix')}`}
+  description={t(locale, 'home.seoDescription')}
+  surface="library"
+>
+  <div class="library-page">
+    <section class="library-hero">
+      <div class="library-hero-inner">
+        <p class="library-eyebrow">{t(locale, 'site.name')}</p>
+        <h1 class="library-hero-title">{t(locale, 'home.hero.title')}</h1>
+        <p class="library-hero-lead">{t(locale, 'home.hero.lead')}</p>
+        <p class="library-hero-purpose">{t(locale, 'home.hero.purpose')}</p>
+      </div>
+    </section>
+
+    <section class="library-mission" aria-labelledby="library-mission-title">
+      <div class="library-mission-inner">
+        <h2 id="library-mission-title" class="library-mission-title">{t(locale, 'home.mission.title')}</h2>
+        <p class="library-mission-text">{t(locale, 'home.mission.p1')}</p>
+        <p class="library-mission-text">{t(locale, 'home.mission.p2')}</p>
+      </div>
+    </section>
+
+    <section class="library-section" aria-labelledby="library-sections-title">
+      <h2 id="library-sections-title" class="library-section-title">{t(locale, 'home.sections.title')}</h2>
+      <ul class="library-sections-grid">
+        <li>
+          <a href={contentSectionPath(locale, 'research')} class="library-section-card">
+            <span class="library-section-card-label">{t(locale, 'nav.research')}</span>
+            <span class="library-section-card-desc">{t(locale, 'home.card.research.desc')}</span>
+            <span class="library-section-card-link">{t(locale, 'home.card.openSection')}</span>
+          </a>
+        </li>
+        <li>
+          <a href={contentSectionPath(locale, 'essays')} class="library-section-card">
+            <span class="library-section-card-label">{t(locale, 'nav.essays')}</span>
+            <span class="library-section-card-desc">{t(locale, 'home.card.essays.desc')}</span>
+            <span class="library-section-card-link">{t(locale, 'home.card.openSection')}</span>
+          </a>
+        </li>
+        <li>
+          <a href={contentSectionPath(locale, 'articles')} class="library-section-card">
+            <span class="library-section-card-label">{t(locale, 'nav.articles')}</span>
+            <span class="library-section-card-desc">{t(locale, 'home.card.articles.desc')}</span>
+            <span class="library-section-card-link">{t(locale, 'home.card.openSection')}</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="library-section">
+      <div class="library-section-header">
+        <h2 class="library-section-title">{t(locale, 'home.featured.title')}</h2>
+        <a href={contentSectionPath(locale, 'research')} class="library-section-link">
+          {t(locale, 'home.featured.allResearch')}
+        </a>
+      </div>
+
+      {
+        lead ? (
+          <a href={publicationPath(lead, locale)} class="library-featured-card">
+            <p class="library-featured-badge">{t(locale, 'home.featured.badge')}</p>
+            <h3 class="library-featured-title">{lead.data.title}</h3>
+            <p class="library-featured-desc">{lead.data.description}</p>
+            <p class="library-featured-meta">
+              <span>{formatPublicationDate(lead.data.publishedAt, locale)}</span>
+              {lead.data.readingTime != null && (
+                <span>
+                  {lead.data.readingTime} {t(locale, 'publication.readingMinutes')}
+                </span>
+              )}
+            </p>
+            <p class="library-featured-cta">{t(locale, 'home.featured.cta')}</p>
+          </a>
+        ) : (
+          <p class="library-empty-note">{t(locale, 'home.featured.empty')}</p>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

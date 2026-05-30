@@ -1,0 +1,86 @@
+---
+import { SUPPORTED_LOCALES, LOCALE_REGISTRY, type Locale } from '../lib/i18n/languages';
+import { switchLocalePath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+  minimal?: boolean;
+}
+
+const { locale, currentPath, minimal = false } = Astro.props;
+---
+
+<nav
+  class:list={[
+    'lang-switcher',
+    minimal ? 'lang-switcher--minimal' : 'lang-switcher--default',
+  ]}
+  aria-label={t(locale, 'lang.switcherAria')}
+>
+  {
+    SUPPORTED_LOCALES.map((code) => (
+      <a
+        href={switchLocalePath(currentPath, code)}
+        class:list={['lang-switcher-link', code === locale && 'lang-switcher-link--active']}
+        hreflang={LOCALE_REGISTRY[code].htmlLang}
+        lang={LOCALE_REGISTRY[code].htmlLang}
+        aria-current={code === locale ? 'page' : undefined}
+      >
+        {LOCALE_REGISTRY[code].label}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .lang-switcher {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .lang-switcher-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 0.375rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .lang-switcher--minimal .lang-switcher-link {
+    color: var(--research-ink-soft, #7a736c);
+    background: transparent;
+  }
+
+  .lang-switcher--minimal .lang-switcher-link:hover {
+    color: var(--research-ink, #1a1816);
+  }
+
+  .lang-switcher--minimal .lang-switcher-link--active {
+    color: var(--research-ink, #1a1816);
+    background: rgba(26, 24, 22, 0.06);
+  }
+
+  .lang-switcher--default .lang-switcher-link {
+    color: #737373;
+    background: transparent;
+  }
+
+  .lang-switcher--default .lang-switcher-link:hover {
+    color: #171717;
+  }
+
+  .lang-switcher--default .lang-switcher-link--active {
+    color: #171717;
+    background: #f5f5f5;
+  }
+</style>

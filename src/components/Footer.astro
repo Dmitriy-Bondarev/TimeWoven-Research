@@ -1,11 +1,14 @@
 ---
-import { SITE_NAME } from '../lib/site';
+import type { Locale } from '../lib/i18n/languages';
+import { contentSectionPath, localePath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
 
 interface Props {
+  locale: Locale;
   variant?: 'default' | 'library';
 }
 
-const { variant = 'default' } = Astro.props;
+const { locale, variant = 'default' } = Astro.props;
 const isLibrary = variant === 'library';
 ---
 
@@ -24,16 +27,16 @@ const isLibrary = variant === 'library';
     {
       isLibrary ? (
         <>
-          <p class="library-footer-brand">{SITE_NAME}</p>
-          <nav class="library-footer-nav" aria-label="Разделы библиотеки">
-            <a href="/">Главная</a>
-            <a href="/research">Исследования</a>
-            <a href="/essays">Эссе</a>
-            <a href="/articles">Статьи</a>
+          <p class="library-footer-brand">{t(locale, 'site.name')}</p>
+          <nav class="library-footer-nav" aria-label={t(locale, 'footer.sectionsAria')}>
+            <a href={localePath(locale, '/')}>{t(locale, 'footer.home')}</a>
+            <a href={contentSectionPath(locale, 'research')}>{t(locale, 'nav.research')}</a>
+            <a href={contentSectionPath(locale, 'essays')}>{t(locale, 'nav.essays')}</a>
+            <a href={contentSectionPath(locale, 'articles')}>{t(locale, 'nav.articles')}</a>
           </nav>
         </>
       ) : (
-        <p>{SITE_NAME}</p>
+        <p>{t(locale, 'site.name')}</p>
       )
     }
   </div>

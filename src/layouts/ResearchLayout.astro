@@ -5,15 +5,17 @@ import AuthorCard from '../components/AuthorCard.astro';
 import ResearchCTA from '../components/ResearchCTA.astro';
 import RelatedResearch from '../components/RelatedResearch.astro';
 import { render, type CollectionEntry } from 'astro:content';
-import { getResearch } from '../lib/publications';
-import { SITE_NAME } from '../lib/site';
+import { getResearch, publicationPath } from '../lib/publications';
 import { getAuthorById } from '../lib/authors';
+import type { Locale } from '../lib/i18n/languages';
+import { t } from '../lib/i18n/messages';
 
 interface Props {
   entry: CollectionEntry<'research'>;
+  locale: Locale;
 }
 
-const { entry } = Astro.props;
+const { entry, locale } = Astro.props;
 const {
   title,
   author: authorId,
@@ -26,14 +28,15 @@ const {
 
 const pageTitle = seoTitle ?? title;
 const description = seoDescription ?? entry.data.description;
-const canonicalPath = `/research/${entry.data.slug}`;
+const canonicalPath = publicationPath(entry, locale);
 const author = await getAuthorById(authorId);
-const allResearch = await getResearch();
+const allResearch = await getResearch(locale);
 const { Content } = await render(entry);
 ---
 
 <BaseLayout
-  title={`${pageTitle} · ${SITE_NAME}`}
+  locale={locale}
+  title={`${pageTitle} · ${t(locale, 'site.name')}`}
   description={description}
   canonicalPath={canonicalPath}
   ogType="article"
@@ -44,6 +47,7 @@ const { Content } = await render(entry);
 >
   <article class="research-page research-page--article tw-article">
     <ResearchHero
+      locale={locale}
       title={title}
       description={description}
       authorName={author?.data.name}
@@ -58,9 +62,9 @@ const { Content } = await render(entry);
     </div>
 
     <footer class="research-page-footer">
-      {author && <AuthorCard author={author} />}
-      <ResearchCTA />
-      <RelatedResearch currentSlug={entry.data.slug} items={allResearch} />
+      {author && <AuthorCard author={author} locale={locale} />}
+      <ResearchCTA locale={locale} />
+      <RelatedResearch locale={locale} currentSlug={entry.data.slug} items={allResearch} />
     </footer>
   </article>
 </BaseLayout>

@@ -1,18 +1,21 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import type { Locale } from '../lib/i18n/languages';
+import { t } from '../lib/i18n/messages';
 
 interface Props {
   author: CollectionEntry<'authors'>;
+  locale: Locale;
 }
 
-const { author } = Astro.props;
+const { author, locale } = Astro.props;
 const { name, role, bio } = author.data;
 ---
 
 <section class="research-author" aria-labelledby="research-author-heading">
-  <h2 id="research-author-heading" class="sr-only">Об авторе</h2>
+  <h2 id="research-author-heading" class="sr-only">{t(locale, 'research.author.headingSr')}</h2>
   <div class="research-author-inner">
-    <p class="research-author-label">Автор</p>
+    <p class="research-author-label">{t(locale, 'research.author.label')}</p>
     <p class="research-author-name">{name}</p>
     <p class="research-author-role">{role}</p>
     <p class="research-author-bio">{bio}</p>
