@@ -2,15 +2,17 @@
 
 Проект: статическая библиотека **https://research.timewoven.ru** (отдельный repo от FastAPI TimeWoven).
 
-## Git (TW-RESEARCH-GITHUB-001 — editorial)
+## Git (TW-RESEARCH-GITHUB-001 + TW-RESEARCH-OPS-001)
 
-- **`main`** — единственная рабочая ветка
-- **`feature/*` → `main`:** PR + squash (рекомендуется); CI `quality` обязателен
+- **`main`** — единственная рабочая ветка (GitHub = source of truth)
+- **MAC** — все коммиты/ветки/PR; git root: `~/Projects/TimeWoven-Research/timewoven-research`
+- **PROD** — редакция и publish; **запрещён `git push` на GitHub**; после merge на MAC — `git fetch` + `reset --hard origin/main`
+- **`feature/*` / `tw-*` → `main`:** PR + CI `quality`; merge на GitHub (не direct push на `main`)
 - **No force push to `main`**
-- **`develop`** — не использовать для публикации (архив)
-- Канон: **`docs/core/Rules_of_work.md`**
+- **`develop`** — архив, не для публикации
+- Канон: **`docs/core/Rules_of_work.md`**, **`docs/TW-RESEARCH-OPS-001.md`**
 
-Редакционный цикл: **PROD → publish → git → GitHub (`main`)**. Не копировать app-flow TimeWoven (`develop`).
+Редакционный цикл: **PROD → edit/build → patch/export → MAC → PR → `main` → PROD resync**. Не копировать app-flow TimeWoven (`develop`).
 
 ## Scope
 
