@@ -60,6 +60,15 @@ export const publicationSchema = z.object({
     .default([]),
 });
 
+function publicationLoader(base: string) {
+  return glob({
+    base,
+    pattern: '**/*.{md,mdx}',
+    /** Unique store id per locale + slug (same slug across languages). */
+    generateId: ({ data }) => `${data.locale}/${data.slug}`,
+  });
+}
+
 const authors = defineCollection({
   loader: glob({ base: './src/content/authors', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
@@ -68,21 +77,24 @@ const authors = defineCollection({
     role: z.string(),
     bio: z.string(),
     avatar: z.string().optional(),
+    nameEn: z.string().optional(),
+    roleEn: z.string().optional(),
+    bioEn: z.string().optional(),
   }),
 });
 
 const articles = defineCollection({
-  loader: glob({ base: './src/content/articles', pattern: '**/*.{md,mdx}' }),
+  loader: publicationLoader('./src/content/articles'),
   schema: publicationSchema,
 });
 
 const research = defineCollection({
-  loader: glob({ base: './src/content/research', pattern: '**/*.{md,mdx}' }),
+  loader: publicationLoader('./src/content/research'),
   schema: publicationSchema,
 });
 
 const essays = defineCollection({
-  loader: glob({ base: './src/content/essays', pattern: '**/*.{md,mdx}' }),
+  loader: publicationLoader('./src/content/essays'),
   schema: publicationSchema,
 });
 

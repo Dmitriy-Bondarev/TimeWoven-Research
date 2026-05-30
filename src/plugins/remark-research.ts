@@ -18,7 +18,7 @@ function isSectionHeading(node: RootContent): node is Heading {
 }
 
 function isBlockHeading(node: RootContent): node is Heading {
-  return node.type === 'heading' && /^Блок\s+\d+/i.test(headingLabel(node));
+  return node.type === 'heading' && /^(?:Блок|Part|Block)\s+\d+/i.test(headingLabel(node));
 }
 
 /** Index of first «Блок N» chapter, else first section heading. */
@@ -109,18 +109,19 @@ function applyChapterHeadings(tree: Root): void {
   visit(tree, 'heading', (node, index, parent) => {
     if (!parent || index == null || (node.depth !== 1 && node.depth !== 2)) return;
     const text = headingLabel(node);
-    const match = text.match(/^Блок\s+(\d+)\.\s*(.+)$/i);
+    const match = text.match(/^(?:Блок|Part|Block)\s+(\d+)\.\s*(.+)$/i);
     if (!match) return;
 
     const num = match[1];
     const title = match[2].trim();
     const id = slugify(title);
+    const partLabel = /^(?:Part|Block)\s+\d+/i.test(text) ? 'Part' : 'Часть';
 
     parent.children.splice(
       index,
       1,
       html('<div class="research-chapter">'),
-      html(`<span class="research-chapter-label">Часть ${num}</span>`),
+      html(`<span class="research-chapter-label">${partLabel} ${num}</span>`),
       html(`<h2 class="research-h2" id="${id}">${title}</h2>`),
       html('</div>'),
     );
@@ -132,9 +133,15 @@ function escapeHtml(text: string): string {
 }
 
 function wrapQuestionsSection(nodes: RootContent[]): RootContent[] {
+  const heading = nodes.find(
+    (node): node is Heading => node.type === 'heading' && node.depth === 2,
+  );
+  const isEnglish = heading ? /questions|epilogue/i.test(headingLabel(heading)) : false;
+  const eyebrow = isEnglish ? 'Practice' : 'Практика';
+
   const out: RootContent[] = [
     html('<section class="research-questions" aria-labelledby="research-questions-title">'),
-    html('<p class="research-questions-eyebrow">Практика</p>'),
+    html(`<p class="research-questions-eyebrow">${eyebrow}</p>`),
   ];
   const closing: RootContent[] = [];
   const cardBuffer: RootContent[] = [];
@@ -157,7 +164,7 @@ function wrapQuestionsSection(nodes: RootContent[]): RootContent[] {
       continue;
     }
 
-    if (node.type === 'paragraph' && /Пока эти вопросы/i.test(toString(node))) {
+    if (node.type === 'paragraph' && /(?:Пока эти вопросы|While there is still someone)/i.test(toString(node))) {
       closing.push(node);
       continue;
     }
@@ -200,13 +207,21 @@ function wrapQuestionsSection(nodes: RootContent[]): RootContent[] {
 }
 
 function wrapSourcesSection(nodes: RootContent[]): RootContent[] {
+  const heading = nodes.find(
+    (node): node is Heading => node.type === 'heading' && node.depth === 2,
+  );
+  const sourcesTitle =
+    heading && /^sources$/i.test(headingLabel(heading)) ? 'Sources' : 'Источники';
+
   const out: RootContent[] = [
     html('<section class="research-sources" aria-labelledby="research-sources-title">'),
   ];
 
   for (const node of nodes) {
     if (isSectionHeading(node) && node.depth === 2) {
-      out.push(html('<h2 id="research-sources-title" class="research-sources-title">Источники</h2>'));
+      out.push(
+        html(`<h2 id="research-sources-title" class="research-sources-title">${sourcesTitle}</h2>`),
+      );
       continue;
     }
     if (node.type === 'list') {
@@ -240,13 +255,13 @@ function partitionSections(tree: Root): void {
   for (const node of children) {
     if (isSectionHeading(node) && node.depth === 2) {
       const label = headingLabel(node);
-      if (/20 вопросов|эпилог/i.test(label)) {
+      if (/20 вопросов|20 questions|эпилог|epilogue/i.test(label)) {
         flush();
         mode = 'questions';
         buffer = [node];
         continue;
       }
-      if (/^источники$/i.test(label)) {
+      if (/^источники$/i.test(label) || /^sources$/i.test(label)) {
         flush();
         mode = 'sources';
         buffer = [node];

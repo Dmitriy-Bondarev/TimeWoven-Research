@@ -92,10 +92,10 @@ const messages = {
     'publication.metaAria': 'Служебная информация о публикации',
   },
   en: {
-    'site.name': 'TimeWoven Project',
+    'site.name': 'TimeWoven',
     'site.tagline': 'Research and publications on preserving memory and family history',
     'meta.defaultDescription':
-      'Research, essays, and materials from the TimeWoven team on family memory and intergenerational continuity.',
+      'Research, essays, and materials from TimeWoven on family memory and continuity across generations.',
     'nav.research': 'Research',
     'nav.essays': 'Essays',
     'nav.articles': 'Articles',
@@ -103,25 +103,25 @@ const messages = {
     'lang.switcherAria': 'Language selection',
     'footer.sectionsAria': 'Library sections',
     'footer.home': 'Home',
-    'home.seoTitleSuffix': 'research library',
+    'home.seoTitleSuffix': 'research library on family memory',
     'home.seoDescription':
-      'Research and publications on how family memory is preserved and why it fades across generations.',
-    'home.hero.title': 'TimeWoven Project Library',
+      'Research and writing on how family memory travels between generations — and why it disappears.',
+    'home.hero.title': 'TimeWoven Research Library',
     'home.hero.lead':
       'Research and publications on preserving memory and the history of families.',
     'home.hero.purpose':
-      'Materials for thoughtful reading, reflection, and new meaning-making.',
-    'home.mission.title': 'Why we do this',
+      'Built for slow reading, reflection, and making new meaning together.',
+    'home.mission.title': 'Why we built this library',
     'home.mission.p1':
-      'Family memory is not only a photo archive or a completed family tree. It is how we understand where we come from and what we can pass on.',
+      'Family memory is more than a photo archive or a finished family tree. It is how we understand where we come from — and what we can still pass on.',
     'home.mission.p2':
-      'The project helps preserve family memory; library materials offer a fresh look at familiar things.',
+      'TimeWoven helps families preserve memory. These materials offer a quieter, clearer way to see familiar stories.',
     'home.sections.title': 'Sections',
     'home.card.research.desc':
-      'In-depth texts on how family memory works, passes between generations, and fades — drawing on sociology, history, and lived family stories.',
-    'home.card.essays.desc': 'Reflections on family and memory. With care and meaning.',
+      'Long-form research on how family memory works, how it moves between generations, and why it fades — grounded in sociology, history, and lived family experience.',
+    'home.card.essays.desc': 'Reflective writing on family and memory — careful, personal, and considered.',
     'home.card.articles.desc':
-      'Short editorial pieces: notes, analyses, and practical observations that complement the library.',
+      'Shorter editorial pieces: notes, analyses, and practical observations that extend the library.',
     'home.card.openSection': 'Open section →',
     'home.featured.title': 'Featured research',
     'home.featured.badge': 'Featured · Research',
@@ -130,24 +130,24 @@ const messages = {
     'home.featured.empty': 'Research publications are in preparation.',
     'catalog.sectionEyebrow': 'Section',
     'catalog.research.seoDescription':
-      'Research on family memory, generations, and intergenerational continuity.',
+      'Research on family memory, generations, and continuity across time.',
     'catalog.research.lead':
-      'In-depth texts on how family memory works, passes between generations, and fades.',
+      'Long-form research on how family memory works, how it passes between generations, and why it disappears — grounded in sociology, history, and lived family experience.',
     'catalog.research.emptyBefore': 'The first research pieces will appear here. For now, return to the',
-    'catalog.research.emptyLink': 'library home page',
+    'catalog.research.emptyLink': 'library home',
     'catalog.essays.seoDescription':
       'Essays on family memory, generational continuity, and personal experience.',
-    'catalog.essays.lead': 'Reflections on family and memory. With care and meaning.',
+    'catalog.essays.lead': 'Reflective writing on family and memory — careful, personal, and considered.',
     'catalog.essays.empty.message': 'The first essays will appear here.',
     'catalog.essays.empty.note':
-      'This section will share lived stories about family memory.\n\nWhile texts are in preparation, explore Research or return home.',
+      'This section will hold lived stories about family memory — alongside our more structured research.\n\nWhile new texts are in preparation, explore Research or return home.',
     'catalog.articles.seoDescription':
-      'Short materials on family memory — notes and analyses that complement the library.',
+      'Short materials on family memory — notes and analyses that extend the library.',
     'catalog.articles.lead':
-      'Short editorial publications: notes, analyses, and practical observations.',
+      'Shorter editorial publications: notes, analyses, and practical observations.',
     'catalog.articles.empty.message': 'This section is in preparation.',
     'catalog.articles.empty.note':
-      'Materials for a single sitting will appear here.\n\nWhile texts are in preparation, explore Research or return home.',
+      'Materials designed for a single sitting will appear here.\n\nWhile new texts are in preparation, explore Research or return home.',
     'catalog.backHomeLibrary': 'Library home',
     'publication.featured': 'Featured',
     'publication.readCta': 'Read →',
@@ -173,9 +173,9 @@ const messages = {
     'fallback.publicationId': 'Publication ID',
     'fallback.backResearch': 'Back to research',
     'fallback.backHome': 'Home',
-    'citation.heading': 'How to cite',
+    'citation.heading': 'Citation',
     'citation.imprint': 'TimeWoven Research.',
-    'citation.permanentUrl': 'Permanent URL:',
+    'citation.permanentUrl': 'Permanent link:',
     'publication.metaAria': 'Publication metadata',
   },
   zh: {

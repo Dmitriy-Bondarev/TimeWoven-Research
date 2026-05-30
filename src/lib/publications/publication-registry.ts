@@ -138,8 +138,16 @@ export async function getPublicationRepresentation(
   return identity.representations.find((item) => item.locale === locale)?.entry;
 }
 
-export function getPermanentPublicationUrl(identity: PublicationIdentity): string {
-  const path = publicationDetailPath(DEFAULT_LOCALE, identity.section, identity.canonicalSlug);
+export function getPermanentPublicationUrl(
+  identity: PublicationIdentity,
+  locale: Locale = DEFAULT_LOCALE,
+): string {
+  const representation =
+    identity.representations.find((item) => item.locale === locale) ??
+    identity.representations.find((item) => item.locale === DEFAULT_LOCALE) ??
+    identity.representations[0];
+  const slug = representation?.slug ?? identity.canonicalSlug;
+  const path = publicationDetailPath(locale, identity.section, slug);
   return new URL(path, SITE).href;
 }
 

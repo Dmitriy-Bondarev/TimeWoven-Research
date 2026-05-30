@@ -24,7 +24,7 @@ const citation = buildCitation({
   title,
   publicationId: identity.publicationId,
   publicationYear: formatCitationYear(resolvePublicationDate(entry.data)),
-  permanentUrl: getPermanentPublicationUrl(identity),
+  permanentUrl: getPermanentPublicationUrl(identity, locale),
 });
 ---
 

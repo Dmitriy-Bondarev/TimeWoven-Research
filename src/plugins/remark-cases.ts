@@ -10,14 +10,15 @@ function escapeHtml(text: string): string {
 }
 
 function isCaseHeading(node: RootContent): node is Heading {
-  return node.type === 'heading' && node.depth === 3 && /^Кейс\s+\d+:/i.test(toString(node));
+  return node.type === 'heading' && node.depth === 3 && /^(?:Кейс|Case)\s+\d+:/i.test(toString(node));
 }
 
-function parseCaseHeading(node: Heading): { num: string; title: string } | null {
+function parseCaseHeading(node: Heading): { num: string; title: string; label: string } | null {
   const text = toString(node).trim();
-  const match = text.match(/^Кейс\s+(\d+):\s*(.+)$/i);
+  const match = text.match(/^(?:Кейс|Case)\s+(\d+):\s*(.+)$/i);
   if (!match) return null;
-  return { num: match[1], title: match[2].trim() };
+  const label = /^Case\s+\d+/i.test(text) ? 'Case' : 'Кейс';
+  return { num: match[1], title: match[2].trim(), label };
 }
 
 /** Wrap «Кейс N: …» blocks in editorial case articles. */
@@ -45,7 +46,7 @@ export function remarkCases() {
       out.push(html('<article class="research-case">'));
       out.push(
         html(
-          `<header class="research-case-header"><span class="research-case-num" aria-hidden="true">Кейс ${parsed.num}</span><h3 class="research-case-title">${escapeHtml(parsed.title)}</h3></header>`,
+          `<header class="research-case-header"><span class="research-case-num" aria-hidden="true">${parsed.label} ${parsed.num}</span><h3 class="research-case-title">${escapeHtml(parsed.title)}</h3></header>`,
         ),
       );
       out.push(html('<div class="research-case-body">'));
