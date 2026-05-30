@@ -37,6 +37,7 @@
 ## GitHub governance
 
 - **TW-RESEARCH-GITHUB-001** — editorial model: `feature/*` → **`main`** (см. `docs/TW-RESEARCH-GITHUB-001.md`)
+- **TW-RESEARCH-OPS-001** — MAC = canonical Git; PROD = editorial only; GitHub = truth (см. `docs/TW-RESEARCH-OPS-001.md`)
 
 ## Следующая волна
 

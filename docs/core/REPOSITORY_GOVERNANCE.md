@@ -1,7 +1,19 @@
 # Repository governance (TimeWoven Research)
 
-**Actual as of:** 2026-05-19  
-**Canon:** **TW-RESEARCH-GITHUB-001** — editorial PROD-first model.
+**Actual as of:** 2026-05-30  
+**Canon:** **TW-RESEARCH-GITHUB-001** (editorial model) + **TW-RESEARCH-OPS-001** (MAC = Git, GitHub = truth).
+
+## Environments (TW-RESEARCH-OPS-001)
+
+| Environment | Role | Git operations |
+|-------------|------|----------------|
+| **PROD** (`vm-nano`, `/root/projects/TimeWoven-Research`) | Edit, build, verify, publish `dist/` | Local commits for editorial work only; **no push to GitHub** |
+| **MAC** (`~/Projects/TimeWoven-Research/timewoven-research`) | Canonical Git workstation | Branch, commit, **PR**, push branches; merge to `main` via GitHub |
+| **GitHub** (`main`) | Source of truth | Protected `main`; PROD must **`reset --hard origin/main`** after MAC merge |
+
+**Invariant:** PROD must **never** stay ahead of GitHub `main`. If PROD has unpushed commits → export patch (`git format-patch`) → apply on MAC → PR → merge → PROD resync.
+
+См. отчёт: **`docs/TW-RESEARCH-OPS-001.md`**.
 
 ## Not the same as TimeWoven (app)
 
@@ -10,7 +22,7 @@
 | Purpose | Product runtime | Editorial publishing (SSG) |
 | Staging | staging.timewoven.ru | **None** (editorial) |
 | Integration branch | `develop` | **None required** |
-| Publish path | develop → main → deploy | **PROD → git → `main`** |
+| Publish path | develop → main → deploy | **PROD edit → MAC git → PR → `main` → PROD resync** |
 | Default branch | `main` | **`main`** |
 | Protected branch | `develop` + `main` | **`main` only** |
 
