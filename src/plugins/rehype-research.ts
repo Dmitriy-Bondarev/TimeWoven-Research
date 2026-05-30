@@ -99,7 +99,7 @@ export function rehypeResearch() {
       if (tag === 'h2') addClass(node, 'research-h2');
       if (tag === 'h3') {
         addClass(node, 'research-h3');
-        if (/^Кейс\s+\d+/i.test(elementText(node))) {
+        if (/^(?:Кейс|Case|案例)\s*\d+/i.test(elementText(node))) {
           addClass(node, 'research-case-title');
         }
       }

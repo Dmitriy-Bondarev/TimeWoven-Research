@@ -1,0 +1,19 @@
+---
+import type { Locale } from '../lib/i18n/languages';
+import { localePath } from '../lib/i18n/paths';
+import { PUBLIC_SITE_URL } from '../lib/domains';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const config = JSON.stringify({
+  locale,
+  cookiesUrl: `${PUBLIC_SITE_URL}${localePath(locale, '/legal/cookies')}`,
+  privacyUrl: `${PUBLIC_SITE_URL}${localePath(locale, '/legal')}`,
+});
+---
+
+<script id="tw-cookie-config" type="application/json" set:html={config} />
+<script src="/scripts/tw-cookie-consent.js" defer></script>

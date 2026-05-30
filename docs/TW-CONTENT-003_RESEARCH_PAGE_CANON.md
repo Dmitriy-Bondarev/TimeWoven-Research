@@ -20,6 +20,8 @@ Values below are **exact** as implemented after TW-CONTENT-002D (+ 002C-FIXA). N
 | Key Findings | **optional** | Frontmatter `keyFindings[]`; injected before practical section |
 | Practical Section | **optional** | 20 questions / interview guides / checklists — `.research-questions` family |
 | Sources | **mandatory** | `.research-sources` + numbered list |
+| Citation | **mandatory** | `.research-citation` — auto from `publicationId` (TW-CONTENT-PUBLISHING-001) |
+| Copyright | **mandatory (RU)** | `.research-copyright` — locale via `copyright.ts` |
 | Author | **mandatory** | `.research-author` |
 | CTA | **mandatory** | `.research-cta` |
 | Related research | **mandatory** | `.research-related` (may show editorial empty line) |
@@ -229,6 +231,22 @@ Includes: questions, checklists, interview guides, family exercises — same vis
 |-------|--------|
 | `--research-space-section` | `3rem` |
 | `--research-space-paragraph` | `1.5rem` |
+
+---
+
+## Publication Identity Layer (TW-CONTENT-PUBLISHING-001)
+
+| Concern | Source |
+|---------|--------|
+| Publication Registry | `src/lib/publications/publication-registry.ts` — `getPublicationById()` |
+| ID format | `TW-R-0001` / `TW-E-0001` / `TW-A-0001` — stable across locales |
+| Citation Rules | `src/lib/publications/citation.ts` + `PublicationCitation.astro` |
+| Copyright Rules | `src/lib/publications/copyright.ts` + `PublicationCopyright.astro` |
+| Language Independence | Same `publicationId` in per-locale content entries; no layout changes for new languages |
+
+Permanent citation URL uses RU canonical path (`prefixDefaultLocale: false`).
+
+Full spec: **`docs/TW-CONTENT-PUBLISHING-001.md`**.
 
 ---
 

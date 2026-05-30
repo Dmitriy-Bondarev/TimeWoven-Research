@@ -1,28 +1,66 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { DEFAULT_LOCALE, type Locale } from './i18n/languages';
-import { localePath, publicationDetailPath } from './i18n/paths';
+import { DEFAULT_LOCALE, type Locale } from '../i18n/languages';
+import { localePath, publicationDetailPath } from '../i18n/paths';
+import {
+  contentTypeSection,
+  type ContentSection,
+  type PublicationEntry,
+} from './publication-types';
+import {
+  getPublicationById,
+  getPublicationRegistry,
+  getPublicationRepresentation,
+  getResearchRegistry,
+  registryDetailPath,
+  type PublicationIdentity,
+  type PublicationRegistryItem,
+} from './publication-registry';
 
-export type PublicationEntry =
-  | CollectionEntry<'research'>
-  | CollectionEntry<'articles'>
-  | CollectionEntry<'essays'>;
+export {
+  getPublicationById,
+  getPublicationRegistry,
+  getPublicationRepresentation,
+  getPermanentPublicationUrl,
+  getAllPublicationIdentities,
+  type PublicationIdentity,
+  type PublicationRegistryItem,
+  type PublicationRepresentation,
+} from './publication-registry';
 
-export type ContentSection = 'research' | 'essays' | 'articles';
+export {
+  assertPublicationIdentity,
+  contentTypeSection,
+  parsePublicationId,
+  publicationTypeFromId,
+  resolvePublicationDate,
+  resolvePublicationType,
+  type ContentSection,
+  type PublicationEntry,
+  type PublicationType,
+} from './publication-types';
 
-export type PublicationRegistryItem = {
-  publicationId: string;
-  slug: string;
-  contentType: PublicationEntry['data']['contentType'];
-};
+export { buildCitation, formatAuthorForCitation, formatCitationYear, type CitationModel } from './citation';
+export { getCopyrightModel, hasCopyright, type CopyrightModel } from './copyright';
+export {
+  isLiveStatus,
+  isMatrixAvailable,
+  matrixStatus,
+  resolveLocaleStatus,
+  type LocaleStatusMap,
+  type PublicationLocaleStatus,
+} from './publication-status';
+export {
+  getTranslationMatrix,
+  getTranslationMatrixRow,
+  matrixCellSymbol,
+  matrixStatusForLocale,
+  type TranslationMatrixRow,
+} from './translation-matrix';
+
+export { getResearchRegistry, registryDetailPath };
 
 export function isPublished(data: PublicationEntry['data']): boolean {
   return !data.draft;
-}
-
-export function contentTypeSection(contentType: PublicationEntry['data']['contentType']): ContentSection {
-  if (contentType === 'research') return 'research';
-  if (contentType === 'essay') return 'essays';
-  return 'articles';
 }
 
 export function sortPublications<T extends PublicationEntry>(entries: T[]): T[] {
@@ -62,26 +100,9 @@ export async function getResearchByPublicationId(
   publicationId: string,
   locale: Locale = DEFAULT_LOCALE,
 ): Promise<CollectionEntry<'research'> | undefined> {
-  const entries = await getResearch(locale);
-  return entries.find((e) => e.data.publicationId === publicationId);
-}
-
-export async function getResearchRegistry(): Promise<PublicationRegistryItem[]> {
-  const entries = await getCollection('research', ({ data }) => isPublished(data));
-  const byId = new Map<string, PublicationRegistryItem>();
-
-  for (const entry of entries) {
-    const existing = byId.get(entry.data.publicationId);
-    if (!existing || entry.data.locale === DEFAULT_LOCALE) {
-      byId.set(entry.data.publicationId, {
-        publicationId: entry.data.publicationId,
-        slug: entry.data.slug,
-        contentType: entry.data.contentType,
-      });
-    }
-  }
-
-  return [...byId.values()];
+  const entry = await getPublicationRepresentation(publicationId, locale);
+  if (!entry || entry.collection !== 'research') return undefined;
+  return entry as CollectionEntry<'research'>;
 }
 
 async function safeCollection<T extends 'articles' | 'essays'>(
@@ -110,14 +131,6 @@ export async function getEssays(locale: Locale = DEFAULT_LOCALE): Promise<Collec
 export function publicationPath(entry: PublicationEntry, locale: Locale = DEFAULT_LOCALE): string {
   const section = contentTypeSection(entry.data.contentType);
   return publicationDetailPath(locale, section, entry.data.slug);
-}
-
-export function registryDetailPath(
-  item: PublicationRegistryItem,
-  locale: Locale = DEFAULT_LOCALE,
-): string {
-  const section = contentTypeSection(item.contentType);
-  return publicationDetailPath(locale, section, item.slug);
 }
 
 export function catalogPath(section: ContentSection, locale: Locale = DEFAULT_LOCALE): string {

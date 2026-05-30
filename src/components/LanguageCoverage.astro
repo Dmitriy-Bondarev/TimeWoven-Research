@@ -1,0 +1,47 @@
+---
+import { LOCALE_REGISTRY, type Locale } from '../lib/i18n/languages';
+import { publicationDetailPath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
+import type { TranslationMatrixRow } from '../lib/publications';
+
+interface Props {
+  locale: Locale;
+  row: TranslationMatrixRow;
+  currentLocale: Locale;
+}
+
+const { locale, row, currentLocale } = Astro.props;
+const links = row.availableLocales.map((code) => ({
+  code,
+  label: LOCALE_REGISTRY[code].coverageLabel,
+  href: publicationDetailPath(code, row.section, row.canonicalSlug),
+  isCurrent: code === currentLocale,
+}));
+---
+
+{
+  links.length > 0 && (
+    <nav class="research-language-coverage" aria-label={t(locale, 'coverage.heading')}>
+      <p class="research-language-coverage-title research-eyebrow">{t(locale, 'coverage.heading')}</p>
+      <ul class="research-language-coverage-list">
+        {
+          links.map((link) => (
+            <li>
+              {
+                link.isCurrent ? (
+                  <span class="research-language-coverage-current" aria-current="page">
+                    {link.label}
+                  </span>
+                ) : (
+                  <a href={link.href} hreflang={LOCALE_REGISTRY[link.code].htmlLang} lang={LOCALE_REGISTRY[link.code].htmlLang}>
+                    {link.label}
+                  </a>
+                )
+              }
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  )
+}

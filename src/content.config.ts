@@ -12,9 +12,15 @@ export const publicationIdSchema = z.string().regex(/^TW-(R|A|E)-\d{4}$/, {
   message: 'publicationId must match TW-R-0001 / TW-A-0001 / TW-E-0001',
 });
 
+export const publicationTypeSchema = z.enum(['research', 'essay', 'article']);
+
 export const publicationSchema = z.object({
   /** Stable identity across locales (TW-CONTENT-I18N-001). */
   publicationId: publicationIdSchema,
+  /** Canonical publication type; defaults from contentType / publicationId prefix. */
+  publicationType: publicationTypeSchema.optional(),
+  /** Canonical publication date for citation; defaults to publishedAt. */
+  publicationDate: z.coerce.date().optional(),
   /** Locale of this representation; default RU for legacy entries. */
   locale: localeSchema.default('ru'),
   title: z.string(),
@@ -54,6 +60,15 @@ export const publicationSchema = z.object({
     .default([]),
 });
 
+function publicationLoader(base: string) {
+  return glob({
+    base,
+    pattern: '**/*.{md,mdx}',
+    /** Unique store id per locale + slug (same slug across languages). */
+    generateId: ({ data }) => `${data.locale}/${data.slug}`,
+  });
+}
+
 const authors = defineCollection({
   loader: glob({ base: './src/content/authors', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
@@ -62,21 +77,27 @@ const authors = defineCollection({
     role: z.string(),
     bio: z.string(),
     avatar: z.string().optional(),
+    nameEn: z.string().optional(),
+    roleEn: z.string().optional(),
+    bioEn: z.string().optional(),
+    nameZh: z.string().optional(),
+    roleZh: z.string().optional(),
+    bioZh: z.string().optional(),
   }),
 });
 
 const articles = defineCollection({
-  loader: glob({ base: './src/content/articles', pattern: '**/*.{md,mdx}' }),
+  loader: publicationLoader('./src/content/articles'),
   schema: publicationSchema,
 });
 
 const research = defineCollection({
-  loader: glob({ base: './src/content/research', pattern: '**/*.{md,mdx}' }),
+  loader: publicationLoader('./src/content/research'),
   schema: publicationSchema,
 });
 
 const essays = defineCollection({
-  loader: glob({ base: './src/content/essays', pattern: '**/*.{md,mdx}' }),
+  loader: publicationLoader('./src/content/essays'),
   schema: publicationSchema,
 });
 

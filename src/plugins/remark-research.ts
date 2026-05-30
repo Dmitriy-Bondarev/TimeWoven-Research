@@ -17,8 +17,21 @@ function isSectionHeading(node: RootContent): node is Heading {
   return node.type === 'heading' && (node.depth === 1 || node.depth === 2);
 }
 
+function parseChapterHeading(text: string): { num: string; title: string; partLabel: string } | null {
+  const ruEn = text.match(/^(?:Блок|Part|Block)\s+(\d+)\.\s*(.+)$/i);
+  if (ruEn) {
+    const partLabel = /^(?:Part|Block)\s+\d+/i.test(text) ? `Part ${ruEn[1]}` : `Часть ${ruEn[1]}`;
+    return { num: ruEn[1], title: ruEn[2].trim(), partLabel };
+  }
+  const zh = text.match(/^第\s*(\d+)\s*部分[\.．、：:\s]+(.+)$/);
+  if (zh) {
+    return { num: zh[1], title: zh[2].trim(), partLabel: `第 ${zh[1]} 部分` };
+  }
+  return null;
+}
+
 function isBlockHeading(node: RootContent): node is Heading {
-  return node.type === 'heading' && /^Блок\s+\d+/i.test(headingLabel(node));
+  return node.type === 'heading' && parseChapterHeading(headingLabel(node)) !== null;
 }
 
 /** Index of first «Блок N» chapter, else first section heading. */
@@ -109,18 +122,17 @@ function applyChapterHeadings(tree: Root): void {
   visit(tree, 'heading', (node, index, parent) => {
     if (!parent || index == null || (node.depth !== 1 && node.depth !== 2)) return;
     const text = headingLabel(node);
-    const match = text.match(/^Блок\s+(\d+)\.\s*(.+)$/i);
-    if (!match) return;
+    const parsed = parseChapterHeading(text);
+    if (!parsed) return;
 
-    const num = match[1];
-    const title = match[2].trim();
+    const { num, title, partLabel } = parsed;
     const id = slugify(title);
 
     parent.children.splice(
       index,
       1,
       html('<div class="research-chapter">'),
-      html(`<span class="research-chapter-label">Часть ${num}</span>`),
+      html(`<span class="research-chapter-label">${partLabel}</span>`),
       html(`<h2 class="research-h2" id="${id}">${title}</h2>`),
       html('</div>'),
     );
@@ -132,9 +144,21 @@ function escapeHtml(text: string): string {
 }
 
 function wrapQuestionsSection(nodes: RootContent[]): RootContent[] {
+  const heading = nodes.find(
+    (node): node is Heading => node.type === 'heading' && node.depth === 2,
+  );
+  const label = heading ? headingLabel(heading) : '';
+  const eyebrow = /问题|结语|questions|epilogue/i.test(label)
+    ? /[\u4e00-\u9fff]/.test(label)
+      ? '实践'
+      : /questions|epilogue/i.test(label)
+        ? 'Practice'
+        : 'Практика'
+    : 'Практика';
+
   const out: RootContent[] = [
     html('<section class="research-questions" aria-labelledby="research-questions-title">'),
-    html('<p class="research-questions-eyebrow">Практика</p>'),
+    html(`<p class="research-questions-eyebrow">${eyebrow}</p>`),
   ];
   const closing: RootContent[] = [];
   const cardBuffer: RootContent[] = [];
@@ -157,7 +181,7 @@ function wrapQuestionsSection(nodes: RootContent[]): RootContent[] {
       continue;
     }
 
-    if (node.type === 'paragraph' && /Пока эти вопросы/i.test(toString(node))) {
+    if (node.type === 'paragraph' && /(?:Пока эти вопросы|While there is still someone|只要还能)/i.test(toString(node))) {
       closing.push(node);
       continue;
     }
@@ -200,13 +224,25 @@ function wrapQuestionsSection(nodes: RootContent[]): RootContent[] {
 }
 
 function wrapSourcesSection(nodes: RootContent[]): RootContent[] {
+  const heading = nodes.find(
+    (node): node is Heading => node.type === 'heading' && node.depth === 2,
+  );
+  const headingLabelText = heading ? headingLabel(heading) : '';
+  const sourcesTitle = /^sources$/i.test(headingLabelText)
+    ? 'Sources'
+    : /^(?:参考文献|来源|参考资料)$/i.test(headingLabelText)
+      ? '参考文献'
+      : 'Источники';
+
   const out: RootContent[] = [
     html('<section class="research-sources" aria-labelledby="research-sources-title">'),
   ];
 
   for (const node of nodes) {
     if (isSectionHeading(node) && node.depth === 2) {
-      out.push(html('<h2 id="research-sources-title" class="research-sources-title">Источники</h2>'));
+      out.push(
+        html(`<h2 id="research-sources-title" class="research-sources-title">${sourcesTitle}</h2>`),
+      );
       continue;
     }
     if (node.type === 'list') {
@@ -240,13 +276,13 @@ function partitionSections(tree: Root): void {
   for (const node of children) {
     if (isSectionHeading(node) && node.depth === 2) {
       const label = headingLabel(node);
-      if (/20 вопросов|эпилог/i.test(label)) {
+      if (/20 вопросов|20 questions|20个|20 个|эпилог|epilogue|结语/i.test(label)) {
         flush();
         mode = 'questions';
         buffer = [node];
         continue;
       }
-      if (/^источники$/i.test(label)) {
+      if (/^источники$/i.test(label) || /^sources$/i.test(label) || /^(?:参考文献|来源|参考资料)$/i.test(label)) {
         flush();
         mode = 'sources';
         buffer = [node];

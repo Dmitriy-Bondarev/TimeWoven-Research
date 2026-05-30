@@ -1,15 +1,17 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import type { Locale } from '../lib/i18n/languages';
+import type { AuthorProfile } from '../lib/authors';
 import { t } from '../lib/i18n/messages';
 
 interface Props {
   author: CollectionEntry<'authors'>;
   locale: Locale;
+  profile: AuthorProfile;
 }
 
-const { author, locale } = Astro.props;
-const { name, role, bio } = author.data;
+const { locale, profile } = Astro.props;
+const { name, role, bio } = profile;
 ---
 
 <section class="research-author" aria-labelledby="research-author-heading">

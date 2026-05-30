@@ -1,6 +1,11 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
+const RESEARCH_SITE_URL = (process.env.RESEARCH_SITE_URL ?? 'https://research.timewoven.ru').replace(
+  /\/+$/,
+  '',
+);
+
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import remarkDirective from 'remark-directive';
@@ -15,7 +20,7 @@ import { rehypeCitationPunctuation } from './src/plugins/rehype-citation-punctua
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://research.timewoven.ru',
+  site: RESEARCH_SITE_URL,
 
   i18n: {
     defaultLocale: 'ru',

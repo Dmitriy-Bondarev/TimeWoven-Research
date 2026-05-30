@@ -4,9 +4,12 @@ import ResearchHero from '../components/ResearchHero.astro';
 import AuthorCard from '../components/AuthorCard.astro';
 import ResearchCTA from '../components/ResearchCTA.astro';
 import RelatedResearch from '../components/RelatedResearch.astro';
+import PublicationCitation from '../components/PublicationCitation.astro';
+import PublicationCopyright from '../components/PublicationCopyright.astro';
+import LanguageCoverage from '../components/LanguageCoverage.astro';
 import { render, type CollectionEntry } from 'astro:content';
-import { getResearch, publicationPath } from '../lib/publications';
-import { getAuthorById } from '../lib/authors';
+import { getPublicationById, getResearch, getTranslationMatrixRow, publicationPath } from '../lib/publications';
+import { getAuthorById, getAuthorProfile, getAuthorCitationName } from '../lib/authors';
 import type { Locale } from '../lib/i18n/languages';
 import { t } from '../lib/i18n/messages';
 
@@ -30,6 +33,9 @@ const pageTitle = seoTitle ?? title;
 const description = seoDescription ?? entry.data.description;
 const canonicalPath = publicationPath(entry, locale);
 const author = await getAuthorById(authorId);
+const authorProfile = author ? getAuthorProfile(author, locale) : null;
+const identity = await getPublicationById(entry.data.publicationId);
+const translationRow = identity ? await getTranslationMatrixRow(entry.data.publicationId) : undefined;
 const allResearch = await getResearch(locale);
 const { Content } = await render(entry);
 ---
@@ -50,7 +56,7 @@ const { Content } = await render(entry);
       locale={locale}
       title={title}
       description={description}
-      authorName={author?.data.name}
+      authorName={authorProfile?.name}
       publishedAt={publishedAt}
       readingTime={readingTime}
     />
@@ -61,8 +67,26 @@ const { Content } = await render(entry);
       </div>
     </div>
 
+    {
+      identity && author && authorProfile && (
+        <aside class="research-publication-meta" aria-label={t(locale, 'publication.metaAria')}>
+          <PublicationCitation
+            locale={locale}
+            identity={identity}
+            entry={entry}
+            authorName={getAuthorCitationName(author, locale)}
+            title={title}
+          />
+          <PublicationCopyright locale={locale} />
+          {translationRow && (
+            <LanguageCoverage locale={locale} row={translationRow} currentLocale={locale} />
+          )}
+        </aside>
+      )
+    }
+
     <footer class="research-page-footer">
-      {author && <AuthorCard author={author} locale={locale} />}
+      {author && authorProfile && <AuthorCard author={author} locale={locale} profile={authorProfile} />}
       <ResearchCTA locale={locale} />
       <RelatedResearch locale={locale} currentSlug={entry.data.slug} items={allResearch} />
     </footer>

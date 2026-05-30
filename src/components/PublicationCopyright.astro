@@ -1,0 +1,22 @@
+---
+import type { Locale } from '../lib/i18n/languages';
+import { getCopyrightModel } from '../lib/publications';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copyright = getCopyrightModel(locale);
+---
+
+{
+  copyright && (
+    <section class="research-copyright" aria-labelledby="research-copyright-title">
+      <h2 id="research-copyright-title" class="research-copyright-heading">
+        {copyright.heading}
+      </h2>
+      <p class="research-copyright-body">{copyright.body}</p>
+    </section>
+  )
+}

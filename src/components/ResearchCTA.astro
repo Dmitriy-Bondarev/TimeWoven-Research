@@ -1,5 +1,6 @@
 ---
 import type { Locale } from '../lib/i18n/languages';
+import { PUBLIC_SITE_URL } from '../lib/domains';
 import { t } from '../lib/i18n/messages';
 
 interface Props {
@@ -13,7 +14,7 @@ const { locale } = Astro.props;
 <div class:list={['research-cta', Astro.props.class]}>
   <div class="research-cta-inner">
     <p class="research-cta-text">{t(locale, 'research.cta.text')}</p>
-    <a href="https://timewoven.ru" class="research-cta-link" rel="noopener noreferrer">
+    <a href={PUBLIC_SITE_URL} class="research-cta-link" rel="noopener noreferrer">
       {t(locale, 'research.cta.link')}
     </a>
   </div>

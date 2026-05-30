@@ -1,6 +1,11 @@
 import { visit } from 'unist-util-visit';
 import type { Element, Root, Text } from 'hast';
-import { needsSentencePeriodBeforeCite } from './remark-citations.ts';
+import {
+  endsWithCitationAnchor,
+  hasSentenceEndingBeforeCite,
+  needsSentencePeriodBeforeCite,
+  sentencePeriodFor,
+} from './citation-punctuation.ts';
 
 function hasClass(node: Element, token: string): boolean {
   const cls = node.properties?.className;
@@ -17,7 +22,7 @@ function textAfterSibling(parent: Element, index: number): string {
 }
 
 /**
- * MD often splits `слово<sup>` across nodes; ensure `.` before cite at sentence end (TW-CONTENT-003A).
+ * MD often splits `word<sup>` across nodes; ensure sentence punctuation before cite (TW-CONTENT-003A / 001B).
  */
 export function rehypeCitationPunctuation() {
   return (tree: Root) => {
@@ -29,13 +34,13 @@ export function rehypeCitationPunctuation() {
       if (!prev || prev.type !== 'text') return;
 
       const text = (prev as Text).value;
-      if (!/[а-яёА-ЯЁ»»"\)»]$/.test(text) || text.endsWith('.')) return;
+      if (!endsWithCitationAnchor(text) || hasSentenceEndingBeforeCite(text)) return;
 
       const after = textAfterSibling(parent, index);
-      if (after.startsWith('.')) return;
+      if (after.startsWith('.') || after.startsWith('。')) return;
 
       if (needsSentencePeriodBeforeCite(after || '\n')) {
-        (prev as Text).value = `${text}.`;
+        (prev as Text).value = `${text}${sentencePeriodFor(text)}`;
       }
     });
   };
