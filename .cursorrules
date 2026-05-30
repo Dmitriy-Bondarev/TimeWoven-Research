@@ -2,28 +2,32 @@
 
 Проект: статическая библиотека **https://research.timewoven.ru** (отдельный repo от FastAPI TimeWoven).
 
-## Git (как TimeWoven, TW-GOV-004)
+## Git (TW-RESEARCH-GITHUB-001 — editorial)
 
-- **`feature/*` → `develop`:** PR + **Squash merge only**
-- **`develop` → `main`:** release PR + **merge commit only**
-- **No direct push / force push to `main`**
+- **`main`** — единственная рабочая ветка
+- **`feature/*` → `main`:** PR + squash (рекомендуется); CI `quality` обязателен
+- **No force push to `main`**
+- **`develop`** — не использовать для публикации (архив)
 - Канон: **`docs/core/Rules_of_work.md`**
+
+Редакционный цикл: **PROD → publish → git → GitHub (`main`)**. Не копировать app-flow TimeWoven (`develop`).
 
 ## Scope
 
-- Задачи **TW-CONTENT-*** только в этом репозитории.
+- Задачи **TW-CONTENT-*** / **TW-RESEARCH-*** только в этом репозитории.
 - Не менять код **`Dmitriy-Bondarev/TimeWoven`** без отдельной задачи.
 - Deploy research: static `dist/` + nginx; не трогать app/admin/timewoven.ru runtime.
 
 ## Docs
 
 - Индекс волн: **`docs/README.md`**
-- После изменений кода: обновлять релевантный **`docs/TW-CONTENT-*.md`** (VERIFY / STATUS).
+- После изменений: релевантный **`docs/TW-*.md`** (VERIFY / STATUS)
 
 ## MAC
 
 ```bash
 cd ~/Projects/TimeWoven-Research/timewoven-research
+git checkout main && git pull origin main
 npm run build
 npm run verify:citations
 ```

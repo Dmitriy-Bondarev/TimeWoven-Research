@@ -26,7 +26,7 @@ Any change to the **canonical research publication template** (structure, typogr
 
 ## Drift prevention
 
-After **5 / 10 / 20 / 50** publications, do **not** “tweak locally per article.” Batch visual review → single TW-CONTENT task → one squash commit to `develop`.
+After **5 / 10 / 20 / 50** publications, do **not** “tweak locally per article.” Batch visual review → single TW-CONTENT task → one squash commit to **`main`** (PR).
 
 ## Canonical reference
 
