@@ -1,7 +1,15 @@
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
+import {
+  CITATION_LOOKBEHIND,
+  needsSentencePeriodBeforeCite,
+  sentencePeriodFor,
+} from './citation-punctuation.ts';
 
-const GLUED_CITE = /(?<=[а-яёА-ЯЁ»»"\)»])(\.?)(\d{1,2})(?=[\s,;:\)\.]|\s|$)/g;
+const GLUED_CITE = new RegExp(
+  `${CITATION_LOOKBEHIND}([\\.。]?)(\\d{1,2})(?=[\\s,;:\\)\\.]|\\s|$)`,
+  'gu',
+);
 const TABLE_CELL_CITE = /(?<=\.)\s+(\d{1,2})(?=\s*$)/g;
 const TABLE_ROW_CITE = /(?<=\.)\s+(\d{1,2})(?=\s*\|)/g;
 const PAREN_COMMA_CITE = /(?<=\))\s+(\d{1,2})(?=,)/g;
@@ -10,15 +18,7 @@ const LINKED_CITE_SUP =
   /<sup class="research-cite"><a href="#source-\d{1,2}" class="research-cite-link" id="cite-ref-\d{1,2}">\d{1,2}<\/a><\/sup>/g;
 const MAX_SOURCE_NUM = 25;
 
-/** Canonical style: period immediately before superscript (`слово.¹`). */
-export function needsSentencePeriodBeforeCite(after: string): boolean {
-  if (after.startsWith('.')) return false;
-  if (after === '') return true;
-  if (/^\n/.test(after)) return true;
-  if (/^\s{2,}/.test(after)) return true;
-  if (/^\s+[А-ЯЁ«]/.test(after)) return true;
-  return false;
-}
+export { needsSentencePeriodBeforeCite } from './citation-punctuation.ts';
 
 function footnoteHtml(n: string): string {
   return `<sup class="research-cite"><a href="#source-${n}" class="research-cite-link" id="cite-ref-${n}">${n}</a></sup>`;
@@ -37,13 +37,16 @@ function isValidCitation(num: string, value: string, start: number, end: number)
   return true;
 }
 
-/** Insert `.` before linked footnote when sentence ends without punctuation (TW-CONTENT-003A). */
+/** Insert sentence punctuation before linked footnote when missing (TW-CONTENT-003A / 001B). */
 export function ensureCitationPunctuation(value: string): string {
   const re = new RegExp(
-    `(?<=[а-яёА-ЯЁ»»"\\)»])(?<!\\.)(?:${LINKED_CITE_SUP.source})(?!\\s*\\.)(?=(?:\\s*\\n|\\s*$|\\s{2,}|\\s+[А-ЯЁ«]))`,
-    'g',
+    `${CITATION_LOOKBEHIND}(?<!\\.|。)(?:${LINKED_CITE_SUP.source})(?!\\s*[\\.。])(?=(?:\\s*\\n|\\s*$|\\s{2,}|\\s+[A-ZА-ЯЁ«"\\u4e00-\\u9fff]))`,
+    'gu',
   );
-  return value.replace(re, (sup) => `.${sup}`);
+  return value.replace(re, (sup, offset, full) => {
+    const before = full.slice(0, offset);
+    return `${sentencePeriodFor(before)}${sup}`;
+  });
 }
 
 export function replaceCitationsInString(value: string): string {
@@ -52,9 +55,10 @@ export function replaceCitationsInString(value: string): string {
     const end = offset + match.length;
     if (!isValidCitation(n, out, offset, end)) return match;
     const after = out.slice(end);
+    const before = out.slice(0, offset);
     let punctuation = dot;
     if (!punctuation && needsSentencePeriodBeforeCite(after)) {
-      punctuation = '.';
+      punctuation = sentencePeriodFor(before);
     }
     return `${punctuation}${footnoteHtml(n)}`;
   });

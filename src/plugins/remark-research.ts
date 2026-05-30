@@ -230,8 +230,8 @@ function wrapSourcesSection(nodes: RootContent[]): RootContent[] {
   const headingLabelText = heading ? headingLabel(heading) : '';
   const sourcesTitle = /^sources$/i.test(headingLabelText)
     ? 'Sources'
-    : /^(?:来源|参考资料)$/i.test(headingLabelText)
-      ? '来源'
+    : /^(?:参考文献|来源|参考资料)$/i.test(headingLabelText)
+      ? '参考文献'
       : 'Источники';
 
   const out: RootContent[] = [
@@ -282,7 +282,7 @@ function partitionSections(tree: Root): void {
         buffer = [node];
         continue;
       }
-      if (/^источники$/i.test(label) || /^sources$/i.test(label) || /^(?:来源|参考资料)$/i.test(label)) {
+      if (/^источники$/i.test(label) || /^sources$/i.test(label) || /^(?:参考文献|来源|参考资料)$/i.test(label)) {
         flush();
         mode = 'sources';
         buffer = [node];
