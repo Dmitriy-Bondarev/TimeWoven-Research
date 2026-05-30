@@ -17,6 +17,14 @@ import { rehypeCitationPunctuation } from './src/plugins/rehype-citation-punctua
 export default defineConfig({
   site: 'https://research.timewoven.ru',
 
+  i18n: {
+    defaultLocale: 'ru',
+    locales: ['ru', 'en', 'zh'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
+
   markdown: {
     remarkPlugins: [remarkDirective, remarkCitations, remarkCases, remarkResearch, remarkKeyFindings],
     rehypePlugins: [rehypeRaw, rehypeResearch, rehypeFootnotes, rehypeCitationPunctuation],

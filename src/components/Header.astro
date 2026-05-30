@@ -1,16 +1,21 @@
 ---
-import { SITE_NAME, SITE_TAGLINE } from '../lib/site';
+import type { Locale } from '../lib/i18n/languages';
+import { contentSectionPath, localePath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 interface Props {
+  locale: Locale;
   minimal?: boolean;
 }
 
-const { minimal = false } = Astro.props;
+const { locale, minimal = false } = Astro.props;
+const currentPath = Astro.url.pathname;
 
 const nav = [
-  { href: '/research', label: 'Исследования' },
-  { href: '/essays', label: 'Эссе' },
-  { href: '/articles', label: 'Статьи' },
+  { href: contentSectionPath(locale, 'research'), labelKey: 'nav.research' as const },
+  { href: contentSectionPath(locale, 'essays'), labelKey: 'nav.essays' as const },
+  { href: contentSectionPath(locale, 'articles'), labelKey: 'nav.articles' as const },
 ];
 ---
 
@@ -27,7 +32,7 @@ const nav = [
     ]}
   >
     <a
-      href="/"
+      href={localePath(locale, '/')}
       class:list={[
         'header-brand transition-colors',
         minimal
@@ -35,41 +40,41 @@ const nav = [
           : 'tracking-tight text-lg font-medium text-neutral-900 hover:text-neutral-600',
       ]}
     >
-      <span class:list={[minimal ? 'header-brand-title' : '']}>
-        {SITE_NAME}
-      </span>
+      <span class:list={[minimal ? 'header-brand-title' : '']}>{t(locale, 'site.name')}</span>
       {
         minimal && (
-          <span class="header-brand-tagline">{SITE_TAGLINE}</span>
+          <span class="header-brand-tagline">{t(locale, 'site.tagline')}</span>
         )
       }
     </a>
-    <nav
-      class:list={[
-        'header-nav flex flex-wrap gap-5 text-sm',
-        minimal ? 'text-[var(--research-ink-soft)]' : 'text-neutral-500',
-      ]}
-      aria-label="Основная навигация"
-    >
-      {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class:list={[
-              'transition-colors shrink-0',
-              minimal ? 'hover:text-[var(--research-ink)]' : 'hover:text-neutral-900',
-            ]}
-          >
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
+    <div class="header-actions">
+      <nav
+        class:list={[
+          'header-nav flex flex-wrap gap-5 text-sm',
+          minimal ? 'text-[var(--research-ink-soft)]' : 'text-neutral-500',
+        ]}
+        aria-label={t(locale, 'nav.aria')}
+      >
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              class:list={[
+                'transition-colors shrink-0',
+                minimal ? 'hover:text-[var(--research-ink)]' : 'hover:text-neutral-900',
+              ]}
+            >
+              {t(locale, item.labelKey)}
+            </a>
+          ))
+        }
+      </nav>
+      <LanguageSwitcher locale={locale} currentPath={currentPath} minimal={minimal} />
+    </div>
   </div>
 </header>
 
 <style>
-  /* TW-CONTENT-003A-FIX-HEADER — brand uses available row width, not fixed 28rem */
   .header-inner--editorial {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -84,6 +89,15 @@ const nav = [
     max-width: none;
     width: 100%;
     min-width: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.625rem;
+    justify-self: end;
+    align-self: center;
   }
 
   .header-inner--editorial .header-nav {
@@ -114,6 +128,12 @@ const nav = [
   @media (max-width: 767px) {
     .header-inner--editorial {
       grid-template-columns: 1fr;
+    }
+
+    .header-actions {
+      align-items: flex-start;
+      justify-self: start;
+      align-self: start;
     }
 
     .header-inner--editorial .header-nav {

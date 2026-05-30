@@ -1,0 +1,62 @@
+---
+import type { Locale } from '../lib/i18n/languages';
+import { contentSectionPath, localePath, publicationDetailPath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  locale: Locale;
+  publicationId: string;
+  slug: string;
+}
+
+const { locale, publicationId, slug } = Astro.props;
+---
+
+<section class="library-fallback" aria-labelledby="translation-unavailable-title">
+  <p class="library-eyebrow">{t(locale, 'publication.type.research')}</p>
+  <h1 id="translation-unavailable-title" class="library-hero-title">{t(locale, 'fallback.title')}</h1>
+  <p class="library-hero-lead">{t(locale, 'fallback.message')}</p>
+  <p class="library-fallback-id">
+    {t(locale, 'fallback.publicationId')}: <code>{publicationId}</code>
+  </p>
+  <p class="library-fallback-links">
+    <a href={contentSectionPath(locale, 'research')}>{t(locale, 'fallback.backResearch')}</a>
+    <span aria-hidden="true"> · </span>
+    <a href={localePath(locale, '/')}>{t(locale, 'fallback.backHome')}</a>
+    {
+      locale !== 'ru' && (
+        <>
+          <span aria-hidden="true"> · </span>
+          <a href={publicationDetailPath('ru', 'research', slug)}>{t('ru', 'publication.readCta')}</a>
+        </>
+      )
+    }
+  </p>
+</section>
+
+<style>
+  .library-fallback {
+    padding: 2rem 0 3rem;
+  }
+
+  .library-fallback-id {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--research-ink-soft, #7a736c);
+  }
+
+  .library-fallback-id code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .library-fallback-links {
+    margin-top: 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .library-fallback-links a {
+    color: var(--research-ink, #1a1816);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

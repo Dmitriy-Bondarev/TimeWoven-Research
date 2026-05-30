@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/i18n/languages';
+import { getResearch, publicationPath } from '../lib/publications';
+import { formatPublicationDate } from '../lib/dates';
+import { contentSectionPath, localePath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const research = await getResearch(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t(locale, 'nav.research')} · ${t(locale, 'site.name')}`}
+  description={t(locale, 'catalog.research.seoDescription')}
+  canonicalPath={contentSectionPath(locale, 'research')}
+  surface="library"
+>
+  <div class="library-page">
+    <header class="library-catalog-header">
+      <p class="library-eyebrow">{t(locale, 'catalog.sectionEyebrow')}</p>
+      <h1 class="library-hero-title library-catalog-header-title">{t(locale, 'nav.research')}</h1>
+      <p class="library-hero-lead library-catalog-header-lead">{t(locale, 'catalog.research.lead')}</p>
+    </header>
+
+    <section class="library-section">
+      {
+        research.length > 0 ? (
+          <ul class="library-catalog-list">
+            {research.map((entry) => (
+              <li>
+                <a href={publicationPath(entry, locale)} class="library-featured-card">
+                  {entry.data.featured && (
+                    <p class="library-featured-badge">{t(locale, 'publication.featured')}</p>
+                  )}
+                  <h2 class="library-featured-title">{entry.data.title}</h2>
+                  <p class="library-featured-desc">{entry.data.description}</p>
+                  <p class="library-featured-meta">
+                    <span>{formatPublicationDate(entry.data.publishedAt, locale)}</span>
+                    {entry.data.readingTime != null && (
+                      <span>
+                        {entry.data.readingTime} {t(locale, 'publication.readingMinutes')}
+                      </span>
+                    )}
+                  </p>
+                  <p class="library-featured-cta">{t(locale, 'publication.readCta')}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="library-empty-note">
+            {t(locale, 'catalog.research.emptyBefore')}{' '}
+            <a href={localePath(locale, '/')}>{t(locale, 'catalog.research.emptyLink')}</a>.
+          </p>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

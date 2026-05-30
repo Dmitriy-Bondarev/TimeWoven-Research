@@ -1,11 +1,22 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { SUPPORTED_LOCALES } from './lib/i18n/languages';
 
 /** Stable publication contract (TW-CONTENT-001A). Extend here only with a migration plan. */
 export const contentTypeSchema = z.enum(['essay', 'research', 'article']);
 
+export const localeSchema = z.enum(SUPPORTED_LOCALES);
+
+export const publicationIdSchema = z.string().regex(/^TW-(R|A|E)-\d{4}$/, {
+  message: 'publicationId must match TW-R-0001 / TW-A-0001 / TW-E-0001',
+});
+
 export const publicationSchema = z.object({
+  /** Stable identity across locales (TW-CONTENT-I18N-001). */
+  publicationId: publicationIdSchema,
+  /** Locale of this representation; default RU for legacy entries. */
+  locale: localeSchema.default('ru'),
   title: z.string(),
   description: z.string(),
   author: z.string(),

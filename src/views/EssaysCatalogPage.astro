@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LibraryEmptyState from '../components/LibraryEmptyState.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import type { Locale } from '../lib/i18n/languages';
+import { getEssays } from '../lib/publications';
+import { contentSectionPath, localePath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const essays = await getEssays(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t(locale, 'nav.essays')} · ${t(locale, 'site.name')}`}
+  description={t(locale, 'catalog.essays.seoDescription')}
+  canonicalPath={contentSectionPath(locale, 'essays')}
+  surface="library"
+>
+  <div class="library-page">
+    <header class="library-catalog-header">
+      <p class="library-eyebrow">{t(locale, 'catalog.sectionEyebrow')}</p>
+      <h1 class="library-hero-title library-catalog-header-title">{t(locale, 'nav.essays')}</h1>
+      <p class="library-hero-lead library-catalog-header-lead">{t(locale, 'catalog.essays.lead')}</p>
+    </header>
+
+    <section class="library-section">
+      {
+        essays.length > 0 ? (
+          <ul class="library-catalog-list">
+            {essays.map((entry) => (
+              <li>
+                <PublicationCard entry={entry} locale={locale} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <LibraryEmptyState
+            message={t(locale, 'catalog.essays.empty.message')}
+            note={t(locale, 'catalog.essays.empty.note')}
+          />
+        )
+      }
+      <p class="library-catalog-back">
+        <a href={contentSectionPath(locale, 'research')}>{t(locale, 'nav.research')}</a>
+        <span aria-hidden="true"> · </span>
+        <a href={localePath(locale, '/')}>{t(locale, 'catalog.backHomeLibrary')}</a>
+      </p>
+    </section>
+  </div>
+</BaseLayout>

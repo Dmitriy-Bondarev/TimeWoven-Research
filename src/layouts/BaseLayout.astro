@@ -1,10 +1,13 @@
 ---
-import '../styles/global.css';
+import { SITE } from '../lib/site';
+import { LOCALE_REGISTRY, type Locale } from '../lib/i18n/languages';
+import { hreflangAlternatesForPath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE, SITE_NAME } from '../lib/site';
 
 interface Props {
+  locale: Locale;
   title?: string;
   description?: string;
   canonicalPath?: string;
@@ -16,8 +19,9 @@ interface Props {
 }
 
 const {
-  title = SITE_NAME,
-  description = 'Исследования, эссе и материалы команды TimeWoven о семейной памяти и межпоколенческой преемственности.',
+  locale,
+  title = t(locale, 'site.name'),
+  description = t(locale, 'meta.defaultDescription'),
   canonicalPath,
   ogType = 'website',
   ogTitle,
@@ -31,6 +35,8 @@ const canonical = new URL(path, SITE).href;
 const socialTitle = ogTitle ?? title;
 const socialDescription = ogDescription ?? description;
 const socialImage = ogImage ? new URL(ogImage, SITE).href : new URL('/favicon.svg', SITE).href;
+const alternates = hreflangAlternatesForPath(path);
+const defaultAlternate = alternates.find((item) => item.locale === 'ru') ?? alternates[0];
 
 const mainClass =
   surface === 'research'
@@ -41,12 +47,22 @@ const mainClass =
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang={LOCALE_REGISTRY[locale].htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      alternates.map((item) => (
+        <link
+          rel="alternate"
+          hreflang={LOCALE_REGISTRY[item.locale].htmlLang}
+          href={new URL(item.href, SITE).href}
+        />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL(defaultAlternate.href, SITE).href} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -57,13 +73,13 @@ const mainClass =
     />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:site_name" content={t(locale, 'site.name')} />
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={socialTitle} />
     <meta property="og:description" content={socialDescription} />
     <meta property="og:image" content={socialImage} />
-    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale" content={LOCALE_REGISTRY[locale].ogLocale} />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={socialTitle} />
     <meta name="twitter:description" content={socialDescription} />
@@ -76,10 +92,10 @@ const mainClass =
         : 'bg-white text-neutral-900',
     ]}
   >
-    <Header minimal={surface === 'research' || surface === 'library'} />
+    <Header locale={locale} minimal={surface === 'research' || surface === 'library'} />
     <main class={mainClass}>
       <slot />
     </main>
-    <Footer variant={surface === 'library' || surface === 'research' ? 'library' : 'default'} />
+    <Footer locale={locale} variant={surface === 'library' || surface === 'research' ? 'library' : 'default'} />
   </body>
 </html>
