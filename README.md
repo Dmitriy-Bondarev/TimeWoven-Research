@@ -20,10 +20,17 @@ npm run verify:citations
 - `docs/` — TW-CONTENT волны и governance (см. [docs/README.md](./docs/README.md))
 - `docs/nginx/research.timewoven.ru.conf` — reference vhost (static)
 
-## Git flow
+## Git flow (как [TimeWoven](https://github.com/Dmitriy-Bondarev/TimeWoven))
 
-- `feature/*` → **`develop`** (PR, squash merge)
-- `develop` → `main` — release по регламенту владельца
+| Step | Rule |
+|------|------|
+| Default branch | **`main`** |
+| Integration | **`feature/*` → `develop`** — PR, **squash merge only** |
+| Release | **`develop` → `main`** — PR, **merge commit only** |
+
+См. [`docs/core/Rules_of_work.md`](./docs/core/Rules_of_work.md), [`docs/core/REPOSITORY_GOVERNANCE.md`](./docs/core/REPOSITORY_GOVERNANCE.md).
+
+**Pull requests:** https://github.com/Dmitriy-Bondarev/TimeWoven-Research/pulls
 
 ## Статус
 
