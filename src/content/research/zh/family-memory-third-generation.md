@@ -373,7 +373,7 @@ SuperJob 受访者中，知晓六代及以上历史的边缘1%群体<sup class="
 19. 你最希望我们保留哪些家族传统？
 20. 你有没有"遗愿清单"——仍想实现的梦想？
 
-## 来源
+## 参考文献
 
 - [Communicative and Cultural Memory - Heidelberg University](http://archiv.ub.uni-heidelberg.de/propylaeumdok/4111/1/Assmann_Communicative_and_Cultural_Memory_2011.pdf)
 - [Communicative and Cultural Memory](https://archiv.ub.uni-heidelberg.de/propylaeumdok/1774/1/Assmann_Communicative_and_cultural_memory_2008.pdf)
@@ -387,16 +387,16 @@ SuperJob 受访者中，知晓六代及以上历史的边缘1%群体<sup class="
 - [Cultural memory: the link between past, present, and future — en](https://www.iea.usp.br/en/news/cultural-memory-the-link-between-past-present-and-future)
 - [Communicative memory - OpenEdition Journals](https://journals.openedition.org/temoigner/2305?lang=en)
 - [Encoding the 'Floating Gap': Linking Cultural Memory, Identity, and Complex Place](https://dh-abstracts.library.virginia.edu/works/9888)
-- [Структурные характеристики семейно-родовой социальной памяти Текст научной статьи по специальности «Социологические науки - КиберЛенинка](https://cyberleninka.ru/article/n/strukturnye-harakteristiki-semeyno-rodovoy-sotsialnoy-pamyati)
-- [Семейно-родовая память: временные ипостаси и социальные ресурсы Текст научной статьи по специальности «Социологические науки - КиберЛенинка](https://cyberleninka.ru/article/n/semeyno-rodovaya-pamyat-vremennye-ipostasi-i-sotsialnye-resursy)
-- [СЕМЕЙНАЯ ПАМЯТЬ КАК ФУНДАМЕНТ ДЛЯ РАЗВИТИЯ ЛИЧНОСТИ - ResearchGate](https://www.researchgate.net/publication/393572851_SEMEJNAA_PAMAT_KAK_FUNDAMENT_DLA_RAZVITIA_LICNOSTI)
-- [Семейное древо: чаще всего россияне знают только три поколения предков](https://www.novostiitkanala.ru/news/detail.php?ID=183597)
-- [Обоснование актуальности: Крепкая семья :: Методические](https://grantam.ru/finansu/obbz/aksm)
-- [ВЦИОМ: У большинства россиян есть родственники, участвовавшие в Великой Отечественной войне - Учительская газета](https://ug.ru/vcziom-u-bolshinstva-rossiyan-est-rodstvenniki-uchastvovavshie-v-velikoj-otechestvennoj-vojne/)
+- [家族与宗族社会记忆的结构特征 — CyberLeninka](https://cyberleninka.ru/article/n/strukturnye-harakteristiki-semeyno-rodovoy-sotsialnoy-pamyati)
+- [家族与宗族记忆：时间形态与社会资源 — CyberLeninka](https://cyberleninka.ru/article/n/semeyno-rodovaya-pamyat-vremennye-ipostasi-i-sotsialnye-resursy)
+- [家族记忆作为人格发展的基础 — ResearchGate](https://www.researchgate.net/publication/393572851_SEMEJNAA_PAMAT_KAK_FUNDAMENT_DLA_RAZVITIA_LICNOSTI)
+- [家谱：大多数俄罗斯人仅能追溯三代祖先](https://www.novostiitkanala.ru/news/detail.php?ID=183597)
+- [相关性论证：稳固的家庭 — Grantam](https://grantam.ru/finansu/obbz/aksm)
+- [全俄社会舆论研究中心：大多数俄罗斯人有参加伟大卫国战争的亲属 — 教师报](https://ug.ru/vcziom-u-bolshinstva-rossiyan-est-rodstvenniki-uchastvovavshie-v-velikoj-otechestvennoj-vojne/)
 - [From one generation to the next: perception of frequency of family memory transmission - PubMed](https://pubmed.ncbi.nlm.nih.gov/40257814/)
 - [Full article: Construction of Self and Family in Intergenerational Family Stories: Associations with Sociocultural Group and Familism in Female Emerging Adults - Taylor & Francis](https://www.tandfonline.com/doi/full/10.1080/15295192.2024.2446820)
 - [Family values: youth's attitudes vs older generation - Besschetnova - Semiotic studies](https://journals.ssau.ru/semiotic/article/view/28106)
-- [Я выбросила свои старые дневники и очень об этом жалею. У кого-нибудь еще есть похожая история? : r/Journaling - Reddit](https://www.reddit.com/r/Journaling/comments/f4944f/i_threw_away_my_old_journals_and_regret_it_deeply/?tl=ru)
+- [我扔掉了旧日记，非常后悔——还有人有类似经历吗？ : r/Journaling — Reddit](https://www.reddit.com/r/Journaling/comments/f4944f/i_threw_away_my_old_journals_and_regret_it_deeply/?tl=ru)
 - [Pass it on: Study examines family memory traditions | umsi](https://si.umich.edu/about-umsi/news/pass-it-study-examines-family-memory-traditions)
 - [Sharing memory and wisdom across generations: A scaffolded community reminiscing programme for adolescents and older adults - Cambridge University Press & Assessment](https://www.cambridge.org/core/journals/memory-mind-and-media/article/sharing-memory-and-wisdom-across-generations-a-scaffolded-community-reminiscing-programme-for-adolescents-and-older-adults/EEB272D022DF4043A4625AF1CDEF36A1)
-- [Семейный альбом и генеалогическое древо: как заинтересовать ребенка историей своей семьи - Постньюс](https://postnews.ru/a/21946)
+- [家庭相册与家谱：如何让孩子对家庭历史产生兴趣 — PostNews](https://postnews.ru/a/21946)
