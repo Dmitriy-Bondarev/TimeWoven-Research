@@ -1,28 +1,41 @@
 ---
 import { SUPPORTED_LOCALES, LOCALE_REGISTRY, type Locale } from '../lib/i18n/languages';
-import { switchLocalePath } from '../lib/i18n/paths';
+import { switchLocalePathForPublication } from '../lib/publications';
 import { t } from '../lib/i18n/messages';
+
+/** LOCAL preview only — TW-RESEARCH-HEADER-001 comparison page */
+export type LangSwitcherVariant = 'reference' | '1' | '2' | '3';
 
 interface Props {
   locale: Locale;
   currentPath: string;
   minimal?: boolean;
+  variant?: LangSwitcherVariant;
 }
 
-const { locale, currentPath, minimal = false } = Astro.props;
+const { locale, currentPath, minimal = false, variant = 'reference' } = Astro.props;
+
+const localeLinks = await Promise.all(
+  SUPPORTED_LOCALES.map(async (code) => ({
+    code,
+    href: await switchLocalePathForPublication(currentPath, code),
+  })),
+);
 ---
 
 <nav
   class:list={[
     'lang-switcher',
-    minimal ? 'lang-switcher--minimal' : 'lang-switcher--default',
+    minimal && 'lang-switcher--minimal',
+    variant === 'reference' ? 'lang-switcher--reference' : `lang-switcher--v${variant}`,
+    !minimal && 'lang-switcher--default',
   ]}
   aria-label={t(locale, 'lang.switcherAria')}
 >
   {
-    SUPPORTED_LOCALES.map((code) => (
+    localeLinks.map(({ code, href }) => (
       <a
-        href={switchLocalePath(currentPath, code)}
+        href={href}
         class:list={['lang-switcher-link', code === locale && 'lang-switcher-link--active']}
         hreflang={LOCALE_REGISTRY[code].htmlLang}
         lang={LOCALE_REGISTRY[code].htmlLang}
@@ -39,48 +52,109 @@ const { locale, currentPath, minimal = false } = Astro.props;
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.375rem;
+    gap: 0.5rem;
   }
 
   .lang-switcher-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 2rem;
-    padding: 0.2rem 0.45rem;
+    min-height: 1.5rem;
+    padding: 0.15rem 0.5rem;
+    border: 0;
     border-radius: 0.375rem;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    background: transparent;
     text-decoration: none;
     transition: color 0.15s ease, background-color 0.15s ease;
   }
 
-  .lang-switcher--minimal .lang-switcher-link {
+  /* Reference (owner CleanShot) — soft pill on active, quiet inactive */
+  .lang-switcher--reference.lang-switcher--minimal {
+    gap: 0.35rem;
+  }
+
+  .lang-switcher--reference .lang-switcher-link {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     color: var(--research-ink-soft, #7a736c);
+    padding: 0.2rem 0.45rem;
+    border-radius: 0.375rem;
+  }
+
+  .lang-switcher--reference .lang-switcher-link:hover {
+    color: var(--research-ink-muted, #5c5650);
+  }
+
+  .lang-switcher--reference .lang-switcher-link--active {
+    color: var(--research-ink, #1a1816);
+    font-weight: 600;
+    background: rgba(26, 24, 22, 0.07);
+  }
+
+  /* Legacy preview variants */
+  .lang-switcher--v1.lang-switcher--minimal {
+    gap: 0;
+    font-size: 0.8125rem;
+  }
+
+  .lang-switcher--v1 .lang-switcher-link {
+    color: var(--research-ink-soft, #7a736c);
+    font-weight: 500;
+    padding: 0.15rem 0.35rem;
+  }
+
+  .lang-switcher--v1 .lang-switcher-link--active {
+    color: var(--research-ink, #1a1816);
+    font-weight: 600;
     background: transparent;
   }
 
-  .lang-switcher--minimal .lang-switcher-link:hover {
-    color: var(--research-ink, #1a1816);
+  .lang-switcher--v2.lang-switcher--minimal {
+    font-size: 0.875rem;
+    gap: 0.5rem;
   }
 
-  .lang-switcher--minimal .lang-switcher-link--active {
-    color: var(--research-ink, #1a1816);
-    background: rgba(26, 24, 22, 0.06);
+  .lang-switcher--v2 .lang-switcher-link {
+    color: var(--research-ink-soft, #7a736c);
+    font-weight: 400;
+    padding: 0.15rem 0.25rem;
+    border-radius: 0;
   }
 
-  .lang-switcher--default .lang-switcher-link {
+  .lang-switcher--v2 .lang-switcher-link--active {
+    color: var(--research-ink, #1a1816);
+    font-weight: 500;
+    background: transparent;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .lang-switcher--v3.lang-switcher--minimal {
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    gap: 0.4rem;
+  }
+
+  .lang-switcher--v3 .lang-switcher-link {
+    color: var(--research-ink-soft, #7a736c);
+    font-weight: 500;
+    padding: 0.15rem 0.25rem;
+  }
+
+  .lang-switcher--v3 .lang-switcher-link--active {
+    color: var(--research-ink, #1a1816);
+    font-weight: 600;
+    background: transparent;
+  }
+
+  .lang-switcher--default.lang-switcher--reference .lang-switcher-link {
     color: #737373;
-    background: transparent;
   }
 
-  .lang-switcher--default .lang-switcher-link:hover {
+  .lang-switcher--default.lang-switcher--reference .lang-switcher-link--active {
     color: #171717;
-  }
-
-  .lang-switcher--default .lang-switcher-link--active {
-    color: #171717;
-    background: #f5f5f5;
+    background: #f0f0f0;
   }
 </style>

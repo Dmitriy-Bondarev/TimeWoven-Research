@@ -22,6 +22,12 @@ export {
   getPublicationRepresentation,
   getPermanentPublicationUrl,
   getAllPublicationIdentities,
+  findPublicationIdentityByDetailPath,
+  publicationDetailHref,
+  publicationSlugForLocale,
+  parsePublicationDetailPath,
+  switchLocalePathForPublication,
+  hreflangAlternatesForPublicationPath,
   type PublicationIdentity,
   type PublicationRegistryItem,
   type PublicationRepresentation,
@@ -126,6 +132,23 @@ export async function getArticles(locale: Locale = DEFAULT_LOCALE): Promise<Coll
 
 export async function getEssays(locale: Locale = DEFAULT_LOCALE): Promise<CollectionEntry<'essays'>[]> {
   return safeCollection('essays', locale);
+}
+
+export async function getEssayBySlug(
+  slug: string,
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<CollectionEntry<'essays'> | undefined> {
+  const entries = await getEssays(locale);
+  return entries.find((e) => e.data.slug === slug);
+}
+
+export async function getEssayByPublicationId(
+  publicationId: string,
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<CollectionEntry<'essays'> | undefined> {
+  const entry = await getPublicationRepresentation(publicationId, locale);
+  if (!entry || entry.collection !== 'essays') return undefined;
+  return entry as CollectionEntry<'essays'>;
 }
 
 export function publicationPath(entry: PublicationEntry, locale: Locale = DEFAULT_LOCALE): string {

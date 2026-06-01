@@ -1,0 +1,57 @@
+---
+/**
+ * LOCAL ONLY — TW-RESEARCH-HEADER-001 language switcher variants (not linked in prod nav).
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import type { LangSwitcherVariant } from '../../components/LanguageSwitcher.astro';
+
+const variants: { id: LangSwitcherVariant; label: string }[] = [
+  { id: 'reference', label: 'Reference — soft pill (production)' },
+  { id: '1', label: 'Variant 1 — text only' },
+  { id: '2', label: 'Variant 2 — underline' },
+  { id: '3', label: 'Variant 3 — uppercase' },
+];
+---
+
+<BaseLayout
+  locale="ru"
+  title="Header language variants — preview"
+  description="Local preview of language switcher styles"
+  surface="library"
+  hideChrome
+>
+  <div class="header-variant-preview">
+    {
+      variants.map((v) => (
+        <section class="header-variant-block" id={`variant-${v.id}`} data-variant={v.id}>
+          <p class="header-variant-label">{v.label}</p>
+          <Header locale="ru" minimal langVariant={v.id} />
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .header-variant-preview {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .header-variant-label {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--research-ink-soft, #7a736c);
+  }
+
+  .header-variant-block :global(header) {
+    border-radius: 0;
+  }
+</style>

@@ -14,7 +14,7 @@ const { locale, row, currentLocale } = Astro.props;
 const links = row.availableLocales.map((code) => ({
   code,
   label: LOCALE_REGISTRY[code].coverageLabel,
-  href: publicationDetailPath(code, row.section, row.canonicalSlug),
+  href: publicationDetailPath(code, row.section, row.slugByLocale[code] ?? row.canonicalSlug),
   isCurrent: code === currentLocale,
 }));
 ---

@@ -4,12 +4,11 @@ export type MessageKey = keyof (typeof messages)['ru'];
 
 const messages = {
   ru: {
-    'site.name': 'Проект TimeWoven',
-    'site.tagline':
-      'Исследования и публикации, связанные с сохранением памяти и историей семей',
+    'site.name': 'TimeWoven',
+    'site.tagline': 'Проект TimeWoven — связь поколений во времени',
     'meta.defaultDescription':
       'Исследования, эссе и материалы команды TimeWoven о семейной памяти и межпоколенческой преемственности.',
-    'nav.research': 'Исследования',
+    'nav.research': 'Публикации',
     'nav.essays': 'Эссе',
     'nav.articles': 'Статьи',
     'nav.aria': 'Основная навигация',
@@ -97,10 +96,10 @@ const messages = {
   },
   en: {
     'site.name': 'TimeWoven',
-    'site.tagline': 'Research and publications on preserving memory and family history',
+    'site.tagline': 'The TimeWoven project — generations connected across time',
     'meta.defaultDescription':
       'Research, essays, and materials from TimeWoven on family memory and continuity across generations.',
-    'nav.research': 'Research',
+    'nav.research': 'Publications',
     'nav.essays': 'Essays',
     'nav.articles': 'Articles',
     'nav.aria': 'Main navigation',
@@ -188,10 +187,10 @@ const messages = {
   },
   zh: {
     'site.name': 'TimeWoven',
-    'site.tagline': '关于家族记忆保存与家族历史的研究与出版物',
+    'site.tagline': 'TimeWoven 项目 — 连接世代与时间',
     'meta.defaultDescription':
       'TimeWoven 关于家族记忆与代际传承的研究、随笔与资料。',
-    'nav.research': '研究',
+    'nav.research': '出版物',
     'nav.essays': '随笔',
     'nav.articles': '文章',
     'nav.aria': '主导航',
