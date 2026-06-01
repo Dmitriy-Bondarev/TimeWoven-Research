@@ -134,6 +134,23 @@ export async function getEssays(locale: Locale = DEFAULT_LOCALE): Promise<Collec
   return safeCollection('essays', locale);
 }
 
+export async function getArticleByPublicationId(
+  publicationId: string,
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<CollectionEntry<'articles'> | undefined> {
+  const entry = await getPublicationRepresentation(publicationId, locale);
+  if (!entry || entry.collection !== 'articles') return undefined;
+  return entry as CollectionEntry<'articles'>;
+}
+
+export async function getArticleBySlug(
+  slug: string,
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<CollectionEntry<'articles'> | undefined> {
+  const entries = await getArticles(locale);
+  return entries.find((e) => e.data.slug === slug);
+}
+
 export async function getEssayBySlug(
   slug: string,
   locale: Locale = DEFAULT_LOCALE,

@@ -1,0 +1,12 @@
+---
+import ArticleArticlePage from '../../../views/ArticleArticlePage.astro';
+import { articleDetailStaticPaths } from '../../../lib/i18n/static-paths';
+
+export async function getStaticPaths() {
+  return articleDetailStaticPaths('en');
+}
+
+const { locale, publicationId, slug } = Astro.props;
+---
+
+<ArticleArticlePage locale={locale} publicationId={publicationId} slug={slug} />

@@ -1,0 +1,75 @@
+---
+import { getResearchByPublicationId, publicationPath } from '../lib/publications';
+import type { Locale } from '../lib/i18n/languages';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const research = await getResearchByPublicationId('TW-R-0001', locale);
+const href = research ? publicationPath(research, locale) : `/research/family-memory-third-generation/`;
+const title =
+  research?.data.title ??
+  (locale === 'en'
+    ? 'Why family memory fades by the third generation'
+    : locale === 'zh'
+      ? '为什么多数家庭对曾祖辈的了解，远比自己以为的少'
+      : 'Почему память семьи исчезает уже в третьем поколении');
+---
+
+<aside class="article-research-bridge" aria-label={t(locale, 'article.researchBridge.aria')}>
+  <p class="article-research-bridge-eyebrow research-eyebrow">{t(locale, 'article.researchBridge.eyebrow')}</p>
+  <p class="article-research-bridge-id">TW-R-0001</p>
+  <p class="article-research-bridge-title">{title}</p>
+  <a class="article-research-bridge-link" href={href}>
+    {t(locale, 'article.researchBridge.cta')} →
+  </a>
+</aside>
+
+<style>
+  .article-research-bridge {
+    max-width: var(--research-measure, 40rem);
+    margin: var(--research-space-section, 3rem) auto 0;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--research-line, #e8e4de);
+    border-radius: 0.375rem;
+    background: var(--research-paper-warm, #faf8f5);
+  }
+
+  .article-research-bridge-eyebrow {
+    margin: 0 0 0.5rem;
+  }
+
+  .article-research-bridge-id {
+    margin: 0 0 0.35rem;
+    font-family: var(--research-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--research-ink-soft, #7a736c);
+  }
+
+  .article-research-bridge-title {
+    margin: 0 0 0.75rem;
+    font-family: var(--research-serif);
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    color: var(--research-ink, #1a1816);
+  }
+
+  .article-research-bridge-link {
+    font-family: var(--research-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--research-ink-muted, #5c5650);
+    text-decoration: none;
+  }
+
+  .article-research-bridge-link:hover {
+    color: var(--research-ink, #1a1816);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

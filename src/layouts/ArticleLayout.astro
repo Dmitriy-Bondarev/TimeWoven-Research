@@ -1,0 +1,93 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ArticleHero from '../components/ArticleHero.astro';
+import ArticleResearchBridge from '../components/ArticleResearchBridge.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+import ResearchCTA from '../components/ResearchCTA.astro';
+import PublicationCitation from '../components/PublicationCitation.astro';
+import PublicationCopyright from '../components/PublicationCopyright.astro';
+import LanguageCoverage from '../components/LanguageCoverage.astro';
+import { render, type CollectionEntry } from 'astro:content';
+import { getPublicationById, getTranslationMatrixRow, publicationPath } from '../lib/publications';
+import { getAuthorById, getAuthorProfile, getAuthorCitationName } from '../lib/authors';
+import type { Locale } from '../lib/i18n/languages';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+  locale: Locale;
+}
+
+const { entry, locale } = Astro.props;
+const {
+  title,
+  author: authorId,
+  publishedAt,
+  readingTime,
+  seoTitle,
+  seoDescription,
+  ogImage,
+} = entry.data;
+
+const pageTitle = seoTitle ?? title;
+const description = seoDescription ?? entry.data.description;
+const canonicalPath = publicationPath(entry, locale);
+const author = await getAuthorById(authorId);
+const authorProfile = author ? getAuthorProfile(author, locale) : null;
+const identity = await getPublicationById(entry.data.publicationId);
+const translationRow = identity ? await getTranslationMatrixRow(entry.data.publicationId) : undefined;
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${pageTitle} · ${t(locale, 'site.name')}`}
+  description={description}
+  canonicalPath={canonicalPath}
+  ogType="article"
+  ogTitle={pageTitle}
+  ogDescription={description}
+  ogImage={ogImage ?? '/og/TW-A-0001.jpg'}
+  surface="research"
+>
+  <article class="research-page research-page--article tw-article article-page">
+    <ArticleHero
+      locale={locale}
+      title={title}
+      publishedAt={publishedAt}
+      readingTime={readingTime}
+      currentPath={canonicalPath}
+    />
+
+    <div class="research-article-shell article-prose-shell">
+      <div class="research-prose article-prose">
+        <Content />
+      </div>
+    </div>
+
+    <ArticleResearchBridge locale={locale} />
+
+    {
+      identity && author && authorProfile && (
+        <aside class="research-publication-meta" aria-label={t(locale, 'publication.metaAria')}>
+          <PublicationCitation
+            locale={locale}
+            identity={identity}
+            entry={entry}
+            authorName={getAuthorCitationName(author, locale)}
+            title={title}
+          />
+          <PublicationCopyright locale={locale} />
+          {translationRow && (
+            <LanguageCoverage locale={locale} row={translationRow} currentLocale={locale} />
+          )}
+        </aside>
+      )
+    }
+
+    <footer class="research-page-footer">
+      {author && authorProfile && <AuthorCard author={author} locale={locale} profile={authorProfile} />}
+      <ResearchCTA locale={locale} />
+    </footer>
+  </article>
+</BaseLayout>

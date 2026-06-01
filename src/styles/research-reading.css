@@ -918,3 +918,61 @@
   color: var(--research-ink-muted);
   margin: 0;
 }
+
+/* TW-A-0001 — article reading column + lighter question lists */
+.article-page .research-article-shell,
+.article-page .article-research-bridge {
+  max-width: 42.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.article-prose {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.article-prose .research-p,
+.article-prose p {
+  margin-bottom: 1.75rem;
+}
+
+.article-prose hr,
+.article-prose .research-hr {
+  border: 0;
+  border-top: 1px solid var(--research-line);
+  opacity: 0.2;
+  margin: 2.5rem 0;
+}
+
+.article-prose .research-questions--light ol,
+.article-prose ol.article-questions-list {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  counter-reset: article-q;
+}
+
+.article-prose .research-questions--light ol > li,
+.article-prose ol.article-questions-list > li {
+  counter-increment: article-q;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin: 0 0 0.875rem;
+  font-family: var(--research-serif);
+  font-size: var(--research-text-body);
+  line-height: var(--research-lh-body);
+  color: var(--research-ink);
+}
+
+.article-prose .research-questions--light ol > li::before,
+.article-prose ol.article-questions-list > li::before {
+  content: counter(article-q) '.';
+  flex-shrink: 0;
+  min-width: 1.5rem;
+  font-family: var(--research-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--research-ink-soft);
+}

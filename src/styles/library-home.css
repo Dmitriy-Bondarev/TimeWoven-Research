@@ -156,6 +156,21 @@
   margin-bottom: 1rem;
 }
 
+.library-publication-id {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #7a736c;
+  margin: -0.5rem 0 0.35rem;
+}
+
+.library-featured-langs {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: #7a736c;
+  margin: 0.35rem 0 0;
+}
+
 .library-featured-title {
   font-family: var(--library-serif);
   font-size: clamp(1.5rem, 3vw, 1.875rem);

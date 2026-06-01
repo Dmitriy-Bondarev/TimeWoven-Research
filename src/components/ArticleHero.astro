@@ -1,0 +1,64 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { formatPublicationDate } from '../lib/dates';
+import type { Locale } from '../lib/i18n/languages';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  publishedAt: Date;
+  readingTime?: number;
+  currentPath: string;
+}
+
+const { locale, title, publishedAt, readingTime, currentPath } = Astro.props;
+---
+
+<header class="research-hero article-hero">
+  <div class="research-hero-inner">
+    <p class="article-hero-meta-row">
+      <span class="research-hero-category">{t(locale, 'publication.type.article')}</span>
+      <span class="article-hero-meta-sep" aria-hidden="true">·</span>
+      <time datetime={publishedAt.toISOString()}>{formatPublicationDate(publishedAt, locale)}</time>
+      {
+        readingTime != null && (
+          <>
+            <span class="article-hero-meta-sep" aria-hidden="true">·</span>
+            <span>
+              {readingTime} {t(locale, 'research.hero.readingMinutes')}
+            </span>
+          </>
+        )
+      }
+    </p>
+    <h1 class="research-hero-title">{title}</h1>
+    <LanguageSwitcher locale={locale} currentPath={currentPath} minimal />
+    <div class="research-hero-divider" aria-hidden="true"></div>
+  </div>
+</header>
+
+<style>
+  .article-hero-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin: 0 0 1.25rem;
+    font-family: var(--research-sans);
+    font-size: 0.8125rem;
+    color: var(--research-ink-soft, #7a736c);
+  }
+
+  .article-hero-meta-row .research-hero-category {
+    margin: 0;
+  }
+
+  .article-hero-meta-sep {
+    opacity: 0.45;
+  }
+
+  .article-hero .lang-switcher {
+    margin-top: 1rem;
+  }
+</style>

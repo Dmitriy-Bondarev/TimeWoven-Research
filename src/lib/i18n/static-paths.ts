@@ -28,3 +28,7 @@ export async function researchDetailStaticPaths(locale: Locale) {
 export async function essayDetailStaticPaths(locale: Locale) {
   return publicationDetailStaticPaths(locale, 'essay');
 }
+
+export async function articleDetailStaticPaths(locale: Locale) {
+  return publicationDetailStaticPaths(locale, 'article');
+}
