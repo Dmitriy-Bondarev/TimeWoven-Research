@@ -1,6 +1,11 @@
 import { getCollection } from 'astro:content';
-import { DEFAULT_LOCALE, type Locale } from '../i18n/languages';
-import { publicationDetailPath } from '../i18n/paths';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from '../i18n/languages';
+import {
+  localePath,
+  parseLocalePath,
+  publicationDetailPath,
+  switchLocalePath,
+} from '../i18n/paths';
 import { SITE } from '../site';
 import {
   assertPublicationIdentity,
@@ -122,6 +127,76 @@ export async function getAllPublicationIdentities(): Promise<PublicationIdentity
   return identities.sort((a, b) => a.publicationId.localeCompare(b.publicationId));
 }
 
+export function publicationSlugForLocale(identity: PublicationIdentity, locale: Locale): string {
+  return identity.representations.find((item) => item.locale === locale)?.slug ?? identity.canonicalSlug;
+}
+
+export function publicationDetailHref(identity: PublicationIdentity, locale: Locale): string {
+  return publicationDetailPath(locale, identity.section, publicationSlugForLocale(identity, locale));
+}
+
+export function parsePublicationDetailPath(pathname: string): {
+  section: ContentSection;
+  slug: string;
+} | null {
+  const { pathname: canonical } = parseLocalePath(pathname);
+  const match = canonical.match(/^\/(research|essays|articles)\/([^/]+)$/);
+  if (!match) return null;
+  return { section: match[1] as ContentSection, slug: match[2] };
+}
+
+export async function findPublicationIdentityByDetailPath(
+  section: ContentSection,
+  slug: string,
+): Promise<PublicationIdentity | undefined> {
+  const identities = await getAllPublicationIdentities();
+  return identities.find(
+    (item) =>
+      item.section === section && item.representations.some((rep) => rep.slug === slug),
+  );
+}
+
+/** Language switcher + hreflang: locale-specific publication slug when available. */
+export async function switchLocalePathForPublication(
+  currentPathname: string,
+  targetLocale: Locale,
+): Promise<string> {
+  const parsed = parsePublicationDetailPath(currentPathname);
+  if (!parsed) return switchLocalePath(currentPathname, targetLocale);
+
+  const identity = await findPublicationIdentityByDetailPath(parsed.section, parsed.slug);
+  if (!identity) return switchLocalePath(currentPathname, targetLocale);
+
+  return publicationDetailHref(identity, targetLocale);
+}
+
+export async function hreflangAlternatesForPublicationPath(
+  pathname: string,
+): Promise<Array<{ locale: Locale; href: string }>> {
+  const { pathname: canonical } = parseLocalePath(pathname);
+  const parsed = parsePublicationDetailPath(pathname);
+
+  if (!parsed) {
+    return SUPPORTED_LOCALES.map((locale) => ({
+      locale,
+      href: localePath(locale, canonical),
+    }));
+  }
+
+  const identity = await findPublicationIdentityByDetailPath(parsed.section, parsed.slug);
+  if (!identity) {
+    return SUPPORTED_LOCALES.map((locale) => ({
+      locale,
+      href: localePath(locale, canonical),
+    }));
+  }
+
+  return SUPPORTED_LOCALES.map((locale) => ({
+    locale,
+    href: publicationDetailHref(identity, locale),
+  }));
+}
+
 export async function getPublicationById(
   publicationId: string,
 ): Promise<PublicationIdentity | undefined> {
@@ -142,12 +217,7 @@ export function getPermanentPublicationUrl(
   identity: PublicationIdentity,
   locale: Locale = DEFAULT_LOCALE,
 ): string {
-  const representation =
-    identity.representations.find((item) => item.locale === locale) ??
-    identity.representations.find((item) => item.locale === DEFAULT_LOCALE) ??
-    identity.representations[0];
-  const slug = representation?.slug ?? identity.canonicalSlug;
-  const path = publicationDetailPath(locale, identity.section, slug);
+  const path = publicationDetailHref(identity, locale);
   return new URL(path, SITE).href;
 }
 

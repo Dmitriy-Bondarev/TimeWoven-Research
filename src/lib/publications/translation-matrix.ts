@@ -15,6 +15,8 @@ export type TranslationMatrixRow = {
   publicationId: string;
   canonicalSlug: string;
   section: PublicationIdentity['section'];
+  /** Per-locale URL slugs for publication detail links. */
+  slugByLocale: Partial<Record<Locale, string>>;
   /** Canonical source language (default locale representation). */
   sourceLocale: Locale;
   locales: LocaleStatusMap;
@@ -39,10 +41,16 @@ function buildRow(identity: PublicationIdentity): TranslationMatrixRow {
     availableLocales[0] ??
     DEFAULT_LOCALE;
 
+  const slugByLocale: Partial<Record<Locale, string>> = {};
+  for (const rep of identity.representations) {
+    slugByLocale[rep.locale] = rep.slug;
+  }
+
   return {
     publicationId: identity.publicationId,
     canonicalSlug: identity.canonicalSlug,
     section: identity.section,
+    slugByLocale,
     sourceLocale,
     locales,
     availableLocales,

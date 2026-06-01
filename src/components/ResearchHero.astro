@@ -10,14 +10,17 @@ interface Props {
   authorName?: string;
   publishedAt: Date;
   readingTime?: number;
+  /** Defaults to research category label. */
+  category?: string;
 }
 
-const { locale, title, description, authorName, publishedAt, readingTime } = Astro.props;
+const { locale, title, description, authorName, publishedAt, readingTime, category } = Astro.props;
+const categoryLabel = category ?? t(locale, 'research.hero.category');
 ---
 
 <header class="research-hero">
   <div class="research-hero-inner">
-    <p class="research-hero-category">{t(locale, 'research.hero.category')}</p>
+    <p class="research-hero-category">{categoryLabel}</p>
     <h1 class="research-hero-title">{title}</h1>
     <p class="research-hero-description">{description}</p>
     <dl class="research-hero-meta">

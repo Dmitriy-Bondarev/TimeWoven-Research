@@ -1,0 +1,34 @@
+---
+import EssayLayout from '../layouts/EssayLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TranslationUnavailable from '../components/TranslationUnavailable.astro';
+import type { Locale } from '../lib/i18n/languages';
+import { getEssayByPublicationId } from '../lib/publications';
+import { publicationDetailPath } from '../lib/i18n/paths';
+import { t } from '../lib/i18n/messages';
+
+interface Props {
+  locale: Locale;
+  publicationId: string;
+  slug: string;
+}
+
+const { locale, publicationId, slug } = Astro.props;
+const entry = await getEssayByPublicationId(publicationId, locale);
+---
+
+{
+  entry ? (
+    <EssayLayout entry={entry} locale={locale} />
+  ) : (
+    <BaseLayout
+      locale={locale}
+      title={`${t(locale, 'fallback.title')} · ${t(locale, 'site.name')}`}
+      description={t(locale, 'fallback.message')}
+      canonicalPath={publicationDetailPath(locale, 'essays', slug)}
+      surface="library"
+    >
+      <TranslationUnavailable locale={locale} publicationId={publicationId} slug={slug} />
+    </BaseLayout>
+  )
+}
