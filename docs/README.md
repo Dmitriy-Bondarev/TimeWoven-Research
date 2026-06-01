@@ -19,6 +19,7 @@
 | 003A | [TW-CONTENT-003A.md](./TW-CONTENT-003A.md) | **CLOSED** |
 | 003A-FIX-HEADER | [TW-CONTENT-003A-FIX-HEADER.md](./TW-CONTENT-003A-FIX-HEADER.md) | CLOSED |
 | 005 | [TW-CONTENT-005_DEPLOY_RECORD.md](./TW-CONTENT-005_DEPLOY_RECORD.md) | **DEPLOYED** (PROD) |
+| E-0001 | [TW-E-0001_RELEASE_RECORD.md](./TW-E-0001_RELEASE_RECORD.md) | **CLOSED** (PROD VERIFIED) |
 
 ## Governance (канон)
 
@@ -30,8 +31,9 @@
 ## PROD
 
 - **URL:** https://research.timewoven.ru
-- **Deploy SHA:** `3165e058102ae6a34ad1352a5c26b2e2c6541985`
-- **Rollback SHA:** `c006d88ac3ed7a490cfb3ac68ab2351df958db41`
+- **Deploy SHA:** `a64817ca0dbd90205d74781b4e2b2f93e65233cd` (TW-E-0001)
+- **Rollback SHA:** `58f4b15` (pre-TW-E-0001)
+- **Previous foundation deploy:** `3165e05` / rollback `c006d88`
 - **Nginx reference:** [nginx/research.timewoven.ru.conf](./nginx/research.timewoven.ru.conf)
 
 ## GitHub governance
@@ -41,4 +43,5 @@
 
 ## Следующая волна
 
-**TW-CONTENT-004** — новые публикации (разблокировано после 003/003A).
+**TW-E-0002** — следующее эссе (Research).  
+**TW-CONTENT-004** — дополнительные публикации research/articles.
