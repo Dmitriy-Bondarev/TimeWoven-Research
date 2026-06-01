@@ -946,7 +946,8 @@
 }
 
 .article-prose .research-questions--light ol,
-.article-prose ol.article-questions-list {
+.article-prose ol.article-questions-list,
+.article-prose ol.research-ol {
   list-style: none;
   margin: 1.5rem 0 0;
   padding: 0;
@@ -954,7 +955,8 @@
 }
 
 .article-prose .research-questions--light ol > li,
-.article-prose ol.article-questions-list > li {
+.article-prose ol.article-questions-list > li,
+.article-prose ol.research-ol > li {
   counter-increment: article-q;
   display: flex;
   gap: 0.75rem;
@@ -967,7 +969,8 @@
 }
 
 .article-prose .research-questions--light ol > li::before,
-.article-prose ol.article-questions-list > li::before {
+.article-prose ol.article-questions-list > li::before,
+.article-prose ol.research-ol > li::before {
   content: counter(article-q) '.';
   flex-shrink: 0;
   min-width: 1.5rem;
