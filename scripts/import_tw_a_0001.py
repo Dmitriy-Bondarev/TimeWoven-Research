@@ -59,6 +59,28 @@ def strip_frontmatter(text: str) -> str:
     return text
 
 
+def strip_service_header(body: str) -> str:
+    """Remove editorial service lines (**TW-A-0001 · …**) and duplicate # headings."""
+    body = body.strip()
+    # **TW-A-0001 · …** then # heading
+    body = re.sub(
+        r"^\*\*TW-[A-Z]-\d+\s·[^\n]+\*\*\s*\n+#{1,2}[^\n]+\n",
+        "",
+        body,
+    )
+    # # heading then **TW-A-0001 · …** (source export order)
+    body = re.sub(
+        r"^#{1,2}[^\n]+\n+\*\*TW-[A-Z]-\d+\s·[^\n]+\*\*\s*\n",
+        "",
+        body,
+    )
+    # Orphan service line
+    body = re.sub(r"^\*\*TW-[A-Z]-\d+\s·[^\n]+\*\*\s*\n", "", body)
+    # Horizontal rule immediately after removed header block
+    body = re.sub(r"^---\s*\n+", "", body)
+    return body.strip()
+
+
 def estimate_reading_time(body: str, locale: str) -> int:
     body = body.strip()
     if locale == "zh":
@@ -87,6 +109,7 @@ title: "{m['title']}"
 description: "{m['description']}"
 seoTitle: "{m['seoTitle']}"
 seoDescription: "{m['seoDescription']}"
+lead: "{m['seoDescription']}"
 ogImage: "/og/TW-A-0001.jpg"
 tags: ["семейная память", "поколения", "коммуникативная память"]
 ---
@@ -97,7 +120,7 @@ tags: ["семейная память", "поколения", "коммуник�
 def import_locale(locale: str, source: Path) -> None:
     if not source.exists():
         raise SystemExit(f"Missing source for {locale}: {source}")
-    body = strip_frontmatter(source.read_text(encoding="utf-8"))
+    body = strip_service_header(strip_frontmatter(source.read_text(encoding="utf-8")))
     out = META[locale]["path"]
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(build_frontmatter(locale, body) + body.strip() + "\n", encoding="utf-8")

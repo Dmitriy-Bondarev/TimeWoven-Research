@@ -7,12 +7,13 @@ import { t } from '../lib/i18n/messages';
 interface Props {
   locale: Locale;
   title: string;
+  lead?: string;
   publishedAt: Date;
   readingTime?: number;
   currentPath: string;
 }
 
-const { locale, title, publishedAt, readingTime, currentPath } = Astro.props;
+const { locale, title, lead, publishedAt, readingTime, currentPath } = Astro.props;
 ---
 
 <header class="research-hero article-hero">
@@ -33,6 +34,7 @@ const { locale, title, publishedAt, readingTime, currentPath } = Astro.props;
       }
     </p>
     <h1 class="research-hero-title">{title}</h1>
+    {lead && <p class="research-hero-description">{lead}</p>}
     <LanguageSwitcher locale={locale} currentPath={currentPath} minimal />
     <div class="research-hero-divider" aria-hidden="true"></div>
   </div>
