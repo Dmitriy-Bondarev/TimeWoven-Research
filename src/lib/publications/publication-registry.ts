@@ -170,6 +170,20 @@ export async function switchLocalePathForPublication(
   return publicationDetailHref(identity, targetLocale);
 }
 
+/** Locales with a published representation for this path (all site locales for non-publication pages). */
+export async function availableLocalesForPublicationPath(pathname: string): Promise<Locale[]> {
+  const parsed = parsePublicationDetailPath(pathname);
+
+  if (!parsed) return [...SUPPORTED_LOCALES];
+
+  const identity = await findPublicationIdentityByDetailPath(parsed.section, parsed.slug);
+  if (!identity) return [...SUPPORTED_LOCALES];
+
+  return SUPPORTED_LOCALES.filter((locale) =>
+    identity.representations.some((rep) => rep.locale === locale && !rep.entry.data.draft),
+  );
+}
+
 export async function hreflangAlternatesForPublicationPath(
   pathname: string,
 ): Promise<Array<{ locale: Locale; href: string }>> {
@@ -191,7 +205,9 @@ export async function hreflangAlternatesForPublicationPath(
     }));
   }
 
-  return SUPPORTED_LOCALES.map((locale) => ({
+  const availableLocales = await availableLocalesForPublicationPath(pathname);
+
+  return availableLocales.map((locale) => ({
     locale,
     href: publicationDetailHref(identity, locale),
   }));

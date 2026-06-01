@@ -2,7 +2,8 @@
 import '../styles/global.css';
 import { SITE } from '../lib/site';
 import { LOCALE_REGISTRY, type Locale } from '../lib/i18n/languages';
-import { hreflangAlternatesForPublicationPath } from '../lib/publications';
+import { hreflangAlternatesForPublicationPath, availableLocalesForPublicationPath } from '../lib/publications';
+import { resolveOgImage } from '../lib/og';
 import { t } from '../lib/i18n/messages';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -39,8 +40,10 @@ const path = canonicalPath ?? Astro.url.pathname;
 const canonical = new URL(path, SITE).href;
 const socialTitle = ogTitle ?? title;
 const socialDescription = ogDescription ?? description;
-const socialImage = ogImage ? new URL(ogImage, SITE).href : new URL('/favicon.svg', SITE).href;
+const socialImage = new URL(resolveOgImage(ogImage), SITE).href;
 const alternates = await hreflangAlternatesForPublicationPath(path);
+const availableLocales = await availableLocalesForPublicationPath(path);
+const ogLocaleAlternates = availableLocales.filter((code) => code !== locale);
 const defaultAlternate = alternates.find((item) => item.locale === 'ru') ?? alternates[0];
 
 const mainClass =
@@ -85,6 +88,11 @@ const mainClass =
     <meta property="og:description" content={socialDescription} />
     <meta property="og:image" content={socialImage} />
     <meta property="og:locale" content={LOCALE_REGISTRY[locale].ogLocale} />
+    {
+      ogLocaleAlternates.map((code) => (
+        <meta property="og:locale:alternate" content={LOCALE_REGISTRY[code].ogLocale} />
+      ))
+    }
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={socialTitle} />
     <meta name="twitter:description" content={socialDescription} />

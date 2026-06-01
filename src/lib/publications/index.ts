@@ -28,6 +28,7 @@ export {
   parsePublicationDetailPath,
   switchLocalePathForPublication,
   hreflangAlternatesForPublicationPath,
+  availableLocalesForPublicationPath,
   type PublicationIdentity,
   type PublicationRegistryItem,
   type PublicationRepresentation,
